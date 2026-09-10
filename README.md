@@ -75,6 +75,14 @@ src/
 Para editar el contenido de una sección, se modifica su archivo en `src/data/`; el texto no está
 mezclado con el JSX de las páginas.
 
+### Nota sobre las fotografías
+
+Las fotografías de `src/assets/images/` son de uso libre (licencia Pexels: gratis para uso
+comercial y no comercial, sin atribución obligatoria) y se eligieron por su temática —cancha,
+balón, acción de juego, jóvenes jugando—, nunca como retrato de un deportista con nombre propio.
+Los jugadores identificados por nombre (sección Atletas) usan a propósito una tarjeta con iniciales
+en vez de una fotografía real, para no publicar fotos de prensa con derechos de autor de terceros.
+
 ### Nota sobre `src/data/fases-sensibles.ts`
 
 El documento fuente de "fases sensibles" trae la estructura de la tabla (capacidades agrupadas ×

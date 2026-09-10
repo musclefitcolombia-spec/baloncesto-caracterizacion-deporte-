@@ -3,6 +3,8 @@ import SectionHeader from '../components/SectionHeader'
 import Source from '../components/Source'
 import ResponsiveTable from '../components/ResponsiveTable'
 import CourtDivider from '../components/CourtDivider'
+import SectionPhoto from '../components/SectionPhoto'
+import jumpAction from '../assets/images/demandas-jump.jpg'
 import { IconPulse, IconTrendUp } from '../components/icons'
 import {
   demandasTecnicoTacticas,
@@ -35,19 +37,28 @@ export default function Demandas() {
 
       <section className="section-shell py-14 sm:py-20">
         <SectionHeader eyebrow="Dimensión física" title="Potencia de salto y potencia anaeróbica por posición" lead={dimensionFisica.intro} />
-        <ResponsiveTable headers={['Posición', 'Potencia de salto', 'Potencia anaeróbica']} caption="Potencia de salto y anaeróbica por posición">
-          {dimensionFisica.datos.map((d) => (
-            <tr key={d.posicion} className="border-t border-ink-900/10 odd:bg-ink-950/[0.02]">
-              <td className="px-4 py-3 font-medium text-ink-950">{d.posicion}</td>
-              <td className="px-4 py-3 text-ink-700">{d.salto}</td>
-              <td className="px-4 py-3 text-ink-700">{d.potencia}</td>
-            </tr>
-          ))}
-        </ResponsiveTable>
-        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-ink-700/70">{dimensionFisica.nota}</p>
-        <p className="mt-2 text-xs text-ink-400">
-          Fuentes: {dimensionFisica.source1}; {dimensionFisica.source2}
-        </p>
+        <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr] lg:items-start">
+          <div>
+            <ResponsiveTable headers={['Posición', 'Potencia de salto', 'Potencia anaeróbica']} caption="Potencia de salto y anaeróbica por posición">
+              {dimensionFisica.datos.map((d) => (
+                <tr key={d.posicion} className="border-t border-ink-900/10 odd:bg-ink-950/[0.02]">
+                  <td className="px-4 py-3 font-medium text-ink-950">{d.posicion}</td>
+                  <td className="px-4 py-3 text-ink-700">{d.salto}</td>
+                  <td className="px-4 py-3 text-ink-700">{d.potencia}</td>
+                </tr>
+              ))}
+            </ResponsiveTable>
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-ink-700/70">{dimensionFisica.nota}</p>
+            <p className="mt-2 text-xs text-ink-400">
+              Fuentes: {dimensionFisica.source1}; {dimensionFisica.source2}
+            </p>
+          </div>
+          <SectionPhoto
+            src={jumpAction}
+            alt="Jugador en el aire ejecutando un mate sobre una cancha exterior, mostrando la potencia de salto propia del baloncesto"
+            aspect="tall"
+          />
+        </div>
       </section>
 
       <CourtDivider />

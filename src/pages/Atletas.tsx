@@ -3,6 +3,8 @@ import SectionHeader from '../components/SectionHeader'
 import Source from '../components/Source'
 import PlayerCard from '../components/PlayerCard'
 import CourtDivider from '../components/CourtDivider'
+import SectionPhoto from '../components/SectionPhoto'
+import trophyPhoto from '../assets/images/atletas-trophy.jpg'
 import { IconTrophy } from '../components/icons'
 import {
   jugadoresLeyenda,
@@ -39,7 +41,14 @@ export default function Atletas() {
         </ol>
         <p className="mt-3 text-xs text-ink-400">Fuentes: {leyendasSource}</p>
 
-        <p className="mt-8 max-w-3xl text-sm leading-relaxed text-ink-700/80">{baloncestoColombiano}</p>
+        <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_1.4fr] lg:items-center">
+          <SectionPhoto
+            src={trophyPhoto}
+            alt="Trofeo, medalla y camiseta de baloncesto sobre fondo naranja, símbolos del legado competitivo del deporte"
+            aspect="tall"
+          />
+          <p className="text-sm leading-relaxed text-ink-700/80">{baloncestoColombiano}</p>
+        </div>
       </section>
 
       <CourtDivider />

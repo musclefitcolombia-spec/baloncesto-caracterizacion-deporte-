@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import SectionHeader from '../components/SectionHeader'
+import SectionPhoto from '../components/SectionPhoto'
+import teamHuddle from '../assets/images/posiciones-huddle.jpg'
 import { posiciones } from '../data/posiciones'
 
 export default function Posiciones() {
@@ -15,6 +17,14 @@ export default function Posiciones() {
 
       <section className="section-shell py-14 sm:py-20">
         <SectionHeader eyebrow="Cinco roles, una cancha" title="Funciones tácticas por posición" />
+
+        <SectionPhoto
+          src={teamHuddle}
+          alt="Equipo de baloncesto reunido en un corrillo durante un partido, coordinando estrategia entre jugadores de distintas posiciones"
+          caption="Cada posición aporta una función distinta al mismo objetivo colectivo."
+          aspect="wide"
+          className="mb-10"
+        />
 
         <div className="grid gap-6 lg:grid-cols-5">
           {posiciones.map((p) => (

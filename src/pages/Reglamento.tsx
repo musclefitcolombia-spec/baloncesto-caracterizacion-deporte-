@@ -1,6 +1,8 @@
 import PageHeader from '../components/PageHeader'
 import SectionHeader from '../components/SectionHeader'
 import CourtDivider from '../components/CourtDivider'
+import SectionPhoto from '../components/SectionPhoto'
+import aerialCourt from '../assets/images/reglamento-aerial.jpg'
 import { IconClock, IconJersey, IconRuler, IconWhistle } from '../components/icons'
 import {
   reglasBasicas,
@@ -32,8 +34,17 @@ export default function Reglamento() {
           ))}
         </div>
 
+        <div className="mt-10">
+          <SectionPhoto
+            src={aerialCourt}
+            alt="Vista aérea de una cancha de baloncesto con sus líneas de marcación, círculo central y zonas pintadas"
+            caption="Líneas de marcación, círculo central y zona restringida: la cancha estandarizada es la base de todo el reglamento."
+            aspect="wide"
+          />
+        </div>
+
         {/* Silueta de cancha, motivo SVG propio */}
-        <div className="mt-10 border border-ink-900/10 bg-court-50 p-6 sm:p-10" aria-hidden="true">
+        <div className="mt-6 border border-ink-900/10 bg-court-50 p-6 sm:p-10" aria-hidden="true">
           <svg viewBox="0 0 280 150" className="mx-auto h-auto w-full max-w-2xl text-ink-900/25">
             <rect x="4" y="4" width="272" height="142" fill="none" stroke="currentColor" strokeWidth="1.5" />
             <line x1="140" y1="4" x2="140" y2="146" stroke="currentColor" strokeWidth="1.5" />

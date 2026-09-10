@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { IconBall } from '../components/icons'
 import CourtDivider from '../components/CourtDivider'
+import SectionPhoto from '../components/SectionPhoto'
+import sunsetDunk from '../assets/images/inicio-sunset.jpg'
 
 const stats = [
   { value: '1891', label: 'Año de invención, por James Naismith' },
@@ -125,6 +127,15 @@ export default function Inicio() {
             </div>
           ))}
         </div>
+      </section>
+
+      <section className="section-shell py-10 sm:py-14">
+        <SectionPhoto
+          src={sunsetDunk}
+          alt="Jugador anotando un mate en una cancha al aire libre, en silueta contra un atardecer anaranjado"
+          caption="Un deporte de invasión de campo compartido, nacido en un gimnasio bajo techo y hoy jugado en todo el mundo."
+          aspect="wide"
+        />
       </section>
 
       <CourtDivider className="py-8" />

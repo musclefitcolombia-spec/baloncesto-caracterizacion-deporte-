@@ -2,6 +2,8 @@ import PageHeader from '../components/PageHeader'
 import SectionHeader from '../components/SectionHeader'
 import Source from '../components/Source'
 import CourtDivider from '../components/CourtDivider'
+import SectionPhoto from '../components/SectionPhoto'
+import kidsPlaying from '../assets/images/juvenil-kids.jpg'
 import { IconShieldCheck, IconPulse } from '../components/icons'
 import {
   maduracionBiologica,
@@ -23,6 +25,15 @@ export default function DesarrolloJuvenil() {
 
       <section className="section-shell py-14 sm:py-20">
         <SectionHeader eyebrow="Maduración biológica" title="Edad biológica vs. edad cronológica" />
+
+        <SectionPhoto
+          src={kidsPlaying}
+          alt="Jóvenes de distintas edades y contexturas jugando baloncesto juntos en una cancha exterior"
+          caption="A la misma edad cronológica, la madurez biológica de cada joven puede ser muy distinta."
+          aspect="wide"
+          className="mb-10 max-w-3xl"
+        />
+
         <div className="max-w-3xl space-y-4">
           <p className="leading-relaxed text-ink-800">{maduracionBiologica.intro}</p>
           <Source>{maduracionBiologica.introSource}</Source>

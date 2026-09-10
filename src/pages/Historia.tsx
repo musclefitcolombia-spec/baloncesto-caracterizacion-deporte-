@@ -2,6 +2,8 @@ import PageHeader from '../components/PageHeader'
 import SectionHeader from '../components/SectionHeader'
 import Source from '../components/Source'
 import CourtDivider from '../components/CourtDivider'
+import SectionPhoto from '../components/SectionPhoto'
+import woodFloorBall from '../assets/images/historia-woodfloor.jpg'
 import {
   hitosMundiales,
   hitosColombia,
@@ -46,6 +48,15 @@ export default function Historia() {
       <section className="section-shell py-14 sm:py-20">
         <SectionHeader eyebrow="Origen mundial" title="De Springfield a los Juegos Olímpicos" />
         <Timeline items={hitosMundiales} />
+
+        <div className="mt-10 max-w-xl">
+          <SectionPhoto
+            src={woodFloorBall}
+            alt="Balón de baloncesto sobre un piso de madera desgastado, típico de los gimnasios donde nació este deporte"
+            caption="El piso de madera de los primeros gimnasios universitarios sigue siendo, un siglo después, la superficie de juego por excelencia."
+            aspect="square"
+          />
+        </div>
       </section>
 
       <CourtDivider />

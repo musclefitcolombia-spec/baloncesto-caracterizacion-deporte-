@@ -2,6 +2,8 @@ import PageHeader from '../components/PageHeader'
 import SectionHeader from '../components/SectionHeader'
 import ResponsiveTable from '../components/ResponsiveTable'
 import CourtDivider from '../components/CourtDivider'
+import SectionPhoto from '../components/SectionPhoto'
+import fieldTest from '../assets/images/deteccion-running.jpg'
 import { IconRadar } from '../components/icons'
 import { evaluacionMotriz, metodosDeteccion } from '../data/deteccion'
 
@@ -21,6 +23,15 @@ export default function Deteccion() {
           title="Evaluación motriz según la edad"
           lead="La siguiente tabla resume, por rango de edad, la batería o instrumento recomendado y lo que evalúa."
         />
+
+        <SectionPhoto
+          src={fieldTest}
+          alt="Grupo de jóvenes realizando un ejercicio de desplazamiento en cancha, como parte de una evaluación motriz de campo"
+          caption="Los test de campo — sprints, agilidad, salto — son la base de toda evaluación motriz aplicada al baloncesto."
+          aspect="wide"
+          className="mb-10"
+        />
+
         <ResponsiveTable headers={['Etapa (edad)', 'Test / batería', 'Instrumento', 'Qué evalúa']} caption="Evaluación motriz por etapa de aprendizaje">
           {evaluacionMotriz.map((e) => (
             <tr key={e.etapa} className="border-t border-ink-900/10 odd:bg-ink-950/[0.02] align-top">
