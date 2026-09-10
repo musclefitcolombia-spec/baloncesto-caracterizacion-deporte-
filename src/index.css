@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper text-ink-900 font-body antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
+
+  ::selection {
+    @apply bg-accent-500 text-paper;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme('colors.accent.500');
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .kicker {
+    @apply font-display text-accent-500 tracking-widest2 text-xs sm:text-sm uppercase;
+  }
+
+  .section-shell {
+    @apply mx-auto max-w-content px-5 sm:px-8 lg:px-10;
+  }
+
+  .court-rule {
+    @apply h-px w-full bg-ink-900/10;
+  }
+}
