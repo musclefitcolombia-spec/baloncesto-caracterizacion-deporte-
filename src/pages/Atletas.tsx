@@ -14,6 +14,8 @@ import {
   perfilesPorPosicion,
   notaIMC,
   notaFuentesTabla,
+  referentesColombianos,
+  notaReferentesColombianos,
 } from '../data/atletas'
 
 export default function Atletas() {
@@ -135,6 +137,29 @@ export default function Atletas() {
         <div className="mt-2">
           <Source>Basketball-Reference.com, 2026; ESPN, 2026; DIRECTV Insider, 2026</Source>
         </div>
+      </section>
+
+      <CourtDivider />
+
+      <section className="section-shell py-14 sm:py-20">
+        <SectionHeader
+          eyebrow="Colombia"
+          title="Referentes colombianos actuales por posición"
+          lead="El jugador colombiano de mayor nivel competitivo identificado hoy en cada una de las cinco posiciones."
+        />
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+          {referentesColombianos.map((r) => (
+            <div key={r.posicion} className="flex flex-col border border-ink-900/10 bg-white/60 p-5 shadow-card">
+              <p className="text-[11px] uppercase tracking-widest2 text-accent-600">{r.posicion}</p>
+              <p className="mt-2 font-display text-lg uppercase leading-tight text-ink-950">{r.nombre}</p>
+              <p className="mt-1 font-jersey text-2xl text-ink-900/70">{r.estatura}</p>
+              <p className="mt-2 text-sm text-ink-700/70">{r.equipo}</p>
+              <p className="mt-3 flex-1 text-xs leading-relaxed text-ink-700/60">{r.nota}</p>
+              <p className="mt-3 text-[11px] uppercase tracking-wide text-ink-400">Fuente: {r.source}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-6 max-w-3xl text-xs leading-relaxed text-ink-400">{notaReferentesColombianos}</p>
       </section>
     </div>
   )

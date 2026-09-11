@@ -3,9 +3,15 @@ export interface Referencia {
   url?: string
 }
 
-// Orden alfabético, formato APA 7. Contenido tomado tal cual del informe fuente
-// (Baloncesto informe - Juan Guarín, Samuel López), sin inventar ni omitir referencias.
+// Orden alfabético, formato APA 7. La base es el informe fuente del curso (Baloncesto informe -
+// Juan Guarín, Samuel López); se sumaron referencias adicionales para los apartados de historia
+// de la NBA/EuroLeague y de referentes colombianos actuales por posición, agregados a pedido de
+// una revisión de compañero de equipo. Ninguna cifra se inventa: todo dato nuevo queda citado aquí.
 export const referencias: Referencia[] = [
+  {
+    cita: 'ACB.com. (2025). Braian Angola, jugador ACB.',
+    url: 'https://acb.com/es/liga/jugadores/braian-angola-30003950',
+  },
   {
     cita: 'About FIBA. (s.f.). Shape of international club competitions.',
     url: 'https://about.fiba.basketball/en/organization/strategy/shape-international-club-competitions',
@@ -20,6 +26,10 @@ export const referencias: Referencia[] = [
     url: 'https://www.ascundeportes.org/item/articulo/18410',
   },
   {
+    cita: 'Ba-ball.com. (s.f.). La fusión entre BAA y NBL que originó la NBA.',
+    url: 'https://ba-ball.com/fusion-nba-baa-nbl-george-mikan-minneapolis-lakers-1949/',
+  },
+  {
     cita:
       'Basketball-Reference.com. (2026). Player pages: Shai Gilgeous-Alexander, Anthony Edwards, Jayson Tatum, Giannis Antetokounmpo, Nikola Jokić.',
     url: 'https://www.basketball-reference.com',
@@ -28,6 +38,10 @@ export const referencias: Referencia[] = [
     cita:
       'Castro, J. B. P. de, & Lima, V. P. (2019). Comparación del perfil antropométrico y la aptitud física de los atletas de baloncesto de diferentes posiciones. Revista Ciencias de la Actividad Física UCM.',
     url: 'https://revistacaf.ucm.cl/article/view/307',
+  },
+  {
+    cita: "Colombia men's national basketball team. (s.f.). Wikipedia, la enciclopedia libre.",
+    url: "https://en.wikipedia.org/wiki/Colombia_men%27s_national_basketball_team",
   },
   {
     cita:
@@ -68,9 +82,20 @@ export const referencias: Referencia[] = [
   },
   {
     cita:
+      'El Colombiano. (s.f.). "El baloncesto europeo es más difícil que la NBA": entrevista con Juan Diego Tello, capitán de la Selección Colombia de baloncesto.',
+    url: 'https://www.elcolombiano.com/deportes/entrevista-con-juan-diego-tello-capitan-de-la-seleccion-colombia-de-baloncesto-FL18464625',
+  },
+  {
+    cita:
       'El Espectador. (2024, 25 de julio). Liga Profesional de Baloncesto: Titanes de Barranquilla logró su noveno título.',
     url:
       'https://www.elespectador.com/deportes/mas-deportes/liga-profesional-de-baloncesto-titanes-de-barranquilla-logro-su-noveno-titulo/',
+  },
+  {
+    cita:
+      'Emisora Atlántico. (2025). Baloncesto: el escolta colombiano Braian Angola suma pólvora al ataque del Dreamland Gran Canaria.',
+    url:
+      'https://emisoraatlantico.com.co/deportes/baloncesto-el-escolta-colombiano-braian-angola-suma-polvora-al-ataque-del-dreamland-gran-canaria/',
   },
   {
     cita: 'Entrenador de Básquet. (2020, 9 de marzo). ¿Qué son las fases sensibles del desarrollo?',
@@ -107,6 +132,10 @@ export const referencias: Referencia[] = [
     url: 'https://www.feb.es/Documentos/Enlaces/%5B5612%5DReglas%20Oficiales%20de%20Baloncesto%20FIBA%202022_V2.pdf',
   },
   {
+    cita: 'FIBA European Champions Cup and EuroLeague history. (s.f.). Wikipedia.',
+    url: 'https://en.wikipedia.org/wiki/FIBA_European_Champions_Cup_and_EuroLeague_history',
+  },
+  {
     cita: 'FIBA.basketball. (s.f.). Historia.',
     url: 'https://www.fiba.basketball/es/history',
   },
@@ -123,6 +152,10 @@ export const referencias: Referencia[] = [
   {
     cita: 'Grupo Sobre Entrenamiento. (2024). Mecánica de las lesiones en miembro inferior en jugadores de baloncesto.',
     url: 'https://g-se.com/es/mecanica-de-las-lesiones-en-miembro-inferior-en-jugadores-de-baloncesto-2984-sa-b63be2929c519c',
+  },
+  {
+    cita: 'Historia de la NBA. (s.f.). Wikipedia, la enciclopedia libre.',
+    url: 'https://es.wikipedia.org/wiki/Historia_de_la_NBA',
   },
   {
     cita: 'IDSPORTS. (s.f.). Competiciones de baloncesto más importantes.',
@@ -143,6 +176,10 @@ export const referencias: Referencia[] = [
   {
     cita: 'Instituto IUDI. (2026). Los 12 mejores jugadores de baloncesto de la historia.',
     url: 'https://institutoiudi.com/consejos/blog/mejores-jugadores-de-baloncesto',
+  },
+  {
+    cita: 'Juan Tello Palacios. (s.f.). Wikipedia, la enciclopedia libre.',
+    url: 'https://es.wikipedia.org/wiki/Juan_Tello_Palacios',
   },
   {
     cita: 'La potencia anaeróbica en el baloncesto. (2003). EFDeportes.',
@@ -185,6 +222,11 @@ export const referencias: Referencia[] = [
     cita:
       'Sáenz-López, P., Feu, S., & Ibáñez, S. (2006). Estudio de la participación de los jugadores españoles de baloncesto en las distintas categorías de la selección nacional. Apunts: Educación Física y Deportes, 85, 36-45.',
     url: 'https://rabida.uhu.es/dspace/handle/10272/14713',
+  },
+  {
+    cita:
+      'Vanguardia. (2023). Hansel Atencia, el santandereano armador de la selección Colombia de baloncesto.',
+    url: 'https://vanguardia.com/deportes/baloncesto/hansel-atencia-el-armador-de-la-seleccion-colombia-de-baloncesto-FF2034117',
   },
   {
     cita:

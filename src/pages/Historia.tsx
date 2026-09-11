@@ -8,6 +8,8 @@ import {
   hitosMundiales,
   hitosColombia,
   datoLigaColombia,
+  historiaNBA,
+  historiaEuroLeague,
   ecosistemaJerarquia,
   genero1910,
   seleccionFemeninaActual,
@@ -56,6 +58,28 @@ export default function Historia() {
             caption="El piso de madera de los primeros gimnasios universitarios sigue siendo, un siglo después, la superficie de juego por excelencia."
             aspect="square"
           />
+        </div>
+      </section>
+
+      <CourtDivider />
+
+      <section className="section-shell py-14 sm:py-20">
+        <SectionHeader eyebrow="Las grandes ligas" title="Historia de la NBA y la EuroLeague" />
+        <div className="grid gap-6 sm:grid-cols-2">
+          <div className="border border-ink-900/10 bg-white/60 p-6 shadow-card">
+            <h3 className="font-display uppercase tracking-tight text-ink-950">NBA (1946-1949)</h3>
+            <p className="mt-2 text-sm leading-relaxed text-ink-800">{historiaNBA.text}</p>
+            <div className="mt-3">
+              <Source>{historiaNBA.source}</Source>
+            </div>
+          </div>
+          <div className="border border-ink-900/10 bg-white/60 p-6 shadow-card">
+            <h3 className="font-display uppercase tracking-tight text-ink-950">EuroLeague (1958-hoy)</h3>
+            <p className="mt-2 text-sm leading-relaxed text-ink-800">{historiaEuroLeague.text}</p>
+            <div className="mt-3">
+              <Source>{historiaEuroLeague.source}</Source>
+            </div>
+          </div>
         </div>
       </section>
 

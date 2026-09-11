@@ -71,6 +71,18 @@ export const hitosColombia: HitoHistorico[] = [
   },
 ]
 
+export const historiaNBA = {
+  text:
+    'En junio de 1946, un grupo de propietarios de recintos deportivos fundó en Estados Unidos la BAA (Basketball Association of America), con once franquicias, buscando profesionalizar el baloncesto y llenar los grandes recintos donde también se jugaba hockey. El partido inaugural, Toronto Huskies contra New York Knicks, se disputó el 1 de noviembre de 1946. El 3 de agosto de 1949, la BAA se fusionó con la NBL (National Basketball League, activa desde 1937) y nació la NBA (National Basketball Association) tal como se conoce hoy, con 17 equipos repartidos en tres divisiones y Maurice Podoloff como primer comisionado.',
+  source: 'Historia de la NBA, Wikipedia; ba-ball.com, La fusión entre BAA y NBL que originó la NBA',
+}
+
+export const historiaEuroLeague = {
+  text:
+    'En Europa, la competición de clubes de más alto nivel nació en 1958 como la FIBA European Champions Cup, organizada por la FIBA con un trofeo donado por el diario francés L\'Équipe; su primer campeón fue el Rīgas ASK soviético. Los clubes de Europa del Este dominaron los primeros años. La competición operó bajo la FIBA hasta 2001, cuando un grupo de clubes creó Euroleague Basketball para gestionarla de forma independiente, adoptando el nombre EuroLeague que mantiene hasta hoy.',
+  source: 'FIBA European Champions Cup and EuroLeague history, Wikipedia',
+}
+
 export const datoLigaColombia = {
   text:
     'A nivel de clubes, la Liga Profesional de Baloncesto de Colombia es organizada por la División Profesional de Baloncesto (DPB) en articulación con la Federación Colombiana de Baloncesto. El club más laureado de su historia es Titanes de Barranquilla, con nueve títulos.',

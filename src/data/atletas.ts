@@ -187,5 +187,64 @@ export const perfilesPorPosicion: PerfilPosicion[] = [
 export const notaIMC =
   'El IMC tiene un valor limitado en deportistas de alto rendimiento, ya que no distingue entre masa muscular y masa grasa; un jugador con IMC en rango "sobrepeso" según la clasificación general puede tener, en realidad, un porcentaje de grasa corporal muy bajo y una masa muscular muy alta. El porcentaje de grasa y muscular rara vez se publica para deportistas profesionales en activo, por lo que solo se reporta cuando existe una fuente pública verificable; en los demás casos se indica expresamente "No publicado" en lugar de estimarlo.'
 
+export interface ReferenteColombia {
+  posicion: string
+  nombre: string
+  estatura: string
+  equipo: string
+  nota: string
+  source: string
+}
+
+// Jugador colombiano profesional más destacado identificado con datos públicos verificables
+// para cada posición (no una convocatoria oficial única: cada uno se tomó de su fuente más
+// reciente y confiable disponible). Se prioriza el nivel competitivo más alto alcanzado por
+// cada jugador sobre la sola pertenencia a la selección nacional.
+export const referentesColombianos: ReferenteColombia[] = [
+  {
+    posicion: 'Base',
+    nombre: 'Hansel Atencia',
+    estatura: '1.75 m',
+    equipo: 'Selección Colombia / Paisas Basketball',
+    nota: 'Armador titular de la selección Colombia, formado en la NCAA antes de dar el salto a Europa en 2019.',
+    source: 'Colombia men\'s national basketball team, Wikipedia (datos FIBA); Vanguardia, 2023',
+  },
+  {
+    posicion: 'Escolta',
+    nombre: 'Braian Angola',
+    estatura: '1.98 m',
+    equipo: 'Dreamland Gran Canaria (Liga Endesa, España)',
+    nota: 'El colombiano de mayor nivel competitivo actual: debuta en la ACB española tras años de sólida producción en competición europea.',
+    source: 'Emisora Atlántico, 2025; acb.com',
+  },
+  {
+    posicion: 'Alero',
+    nombre: 'Michaell Jackson',
+    estatura: '1.96 m',
+    equipo: 'Motilones del Norte (Colombia)',
+    nota: 'Capitán de la selección Colombia masculina de mayores.',
+    source: 'Colombia men\'s national basketball team, Wikipedia (datos FIBA)',
+  },
+  {
+    posicion: 'Ala-Pívot',
+    nombre: 'Juan Diego Tello',
+    estatura: '2.05 m',
+    equipo: 'Titanes de Barranquilla (Colombia)',
+    nota: 'Bicampeón de la Liga Profesional de Baloncesto de Colombia (2020 y 2021); con experiencia previa en baloncesto europeo.',
+    source: 'Juan Tello Palacios, Wikipedia; El Colombiano, entrevista',
+  },
+  {
+    posicion: 'Pívot',
+    nombre: 'Jaime Echenique',
+    estatura: '2.11 m',
+    equipo: 'Capital City Go-Go (G League, EE. UU.)',
+    nota: 'El colombiano más cerca de la NBA en la actualidad: milita en la G League, la liga de desarrollo de la NBA.',
+    source: 'El Colombiano, 2022',
+  },
+]
+
+export const notaReferentesColombianos =
+  'A diferencia de la tabla anterior (referentes globales por posición, con fuente oficial única de liga), esta selección combina distintas fuentes periodísticas y bases de datos verificables para identificar al jugador colombiano de mayor nivel competitivo en cada posición; no corresponde a una convocatoria única de la selección nacional en una fecha específica.'
+
 export const notaFuentesTabla =
   'Las medidas de estatura, peso y edad de los jugadores de la NBA se tomaron de sus fichas oficiales en Basketball-Reference.com (2026); las de las jugadoras de la WNBA, de fichas oficiales reproducidas por ESPN (2026) y por DIRECTV Insider (2026). La envergadura de Gilgeous-Alexander corresponde a su medición oficial en el Draft NBA 2018 (NBC Sports Philadelphia, 2018); la de Stewart, a una medición reportada por Yahoo Sports (2025).'
