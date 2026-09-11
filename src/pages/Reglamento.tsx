@@ -3,6 +3,8 @@ import SectionHeader from '../components/SectionHeader'
 import CourtDivider from '../components/CourtDivider'
 import SectionPhoto from '../components/SectionPhoto'
 import aerialCourt from '../assets/images/reglamento-aerial.jpg'
+import whistlePortrait from '../assets/images/reglamento-whistle.jpg'
+import shoesDetail from '../assets/images/reglamento-shoes.jpg'
 import { IconClock, IconJersey, IconRuler, IconWhistle } from '../components/icons'
 import {
   reglasBasicas,
@@ -40,6 +42,7 @@ export default function Reglamento() {
             alt="Vista aérea de una cancha de baloncesto con sus líneas de marcación, círculo central y zonas pintadas"
             caption="Líneas de marcación, círculo central y zona restringida: la cancha estandarizada es la base de todo el reglamento."
             aspect="wide"
+            parallax
           />
         </div>
 
@@ -92,18 +95,28 @@ export default function Reglamento() {
 
             <div className="mt-10">
               <SectionHeader eyebrow="Dirección del partido" title="Cuerpo arbitral" />
-              <ul className="space-y-3">
-                {cuerpoArbitral.map((c) => (
-                  <li key={c.rol} className="flex gap-3">
-                    <IconWhistle className="mt-0.5 h-5 w-5 shrink-0 text-accent-500" />
-                    <div>
-                      <p className="text-sm font-medium text-ink-950">{c.rol}</p>
-                      <p className="text-sm text-ink-700/70">{c.detalle}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-4 text-xs leading-relaxed text-ink-400">{notaArbitral}</p>
+              <div className="grid gap-6 sm:grid-cols-[1fr_140px] sm:items-start">
+                <div>
+                  <ul className="space-y-3">
+                    {cuerpoArbitral.map((c) => (
+                      <li key={c.rol} className="flex gap-3">
+                        <IconWhistle className="mt-0.5 h-5 w-5 shrink-0 text-accent-500" />
+                        <div>
+                          <p className="text-sm font-medium text-ink-950">{c.rol}</p>
+                          <p className="text-sm text-ink-700/70">{c.detalle}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-4 text-xs leading-relaxed text-ink-400">{notaArbitral}</p>
+                </div>
+                <SectionPhoto
+                  src={whistlePortrait}
+                  alt="Árbitro de baloncesto con silbato en la boca, observando el juego desde la cancha"
+                  aspect="tall"
+                  className="hidden sm:block"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -113,17 +126,24 @@ export default function Reglamento() {
 
       <section className="section-shell py-14 sm:py-20">
         <SectionHeader eyebrow="Equipamiento" title="Indumentaria y material deportivo" />
-        <div className="grid gap-5 sm:grid-cols-3">
-          {material.map((m, i) => (
-            <div key={m.titulo} className="border border-ink-900/10 bg-white/60 p-6 shadow-card">
-              {i === 0 && <IconRuler className="h-6 w-6 text-accent-500" />}
-              {i === 1 && <IconRuler className="h-6 w-6 text-accent-500" />}
-              {i === 2 && <IconJersey className="h-6 w-6 text-accent-500" />}
-              <h3 className="mt-3 font-display uppercase tracking-tight text-ink-950">{m.titulo}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-700/80">{m.detalle}</p>
-              <p className="mt-2 text-xs uppercase tracking-wide text-ink-400">Fuente: {m.source}</p>
-            </div>
-          ))}
+        <div className="grid gap-8 lg:grid-cols-[220px_1fr] lg:items-start">
+          <SectionPhoto
+            src={shoesDetail}
+            alt="Par de zapatillas de baloncesto de caña alta, diseñadas para dar soporte de tobillo"
+            aspect="square"
+          />
+          <div className="grid gap-5 sm:grid-cols-3">
+            {material.map((m, i) => (
+              <div key={m.titulo} className="border border-ink-900/10 bg-white/60 p-6 shadow-card">
+                {i === 0 && <IconRuler className="h-6 w-6 text-accent-500" />}
+                {i === 1 && <IconRuler className="h-6 w-6 text-accent-500" />}
+                {i === 2 && <IconJersey className="h-6 w-6 text-accent-500" />}
+                <h3 className="mt-3 font-display uppercase tracking-tight text-ink-950">{m.titulo}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-700/80">{m.detalle}</p>
+                <p className="mt-2 text-xs uppercase tracking-wide text-ink-400">Fuente: {m.source}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </div>

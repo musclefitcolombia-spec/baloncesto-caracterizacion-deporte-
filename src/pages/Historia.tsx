@@ -4,6 +4,7 @@ import Source from '../components/Source'
 import CourtDivider from '../components/CourtDivider'
 import SectionPhoto from '../components/SectionPhoto'
 import woodFloorBall from '../assets/images/historia-woodfloor.jpg'
+import womenPlaying from '../assets/images/historia-women.jpg'
 import {
   hitosMundiales,
   hitosColombia,
@@ -147,7 +148,15 @@ export default function Historia() {
           </div>
         </div>
 
-        <div className="mt-10 grid gap-6 border border-ink-900/10 bg-ink-950 p-6 text-paper sm:grid-cols-[auto_1fr] sm:items-center sm:p-8">
+        <SectionPhoto
+          src={womenPlaying}
+          alt="Dos jugadoras de baloncesto en plena acción de ataque y defensa durante un partido"
+          caption="Desde la ley de 1910 hasta la selección femenina de hoy: un siglo de presencia femenina en el baloncesto."
+          aspect="wide"
+          className="mt-10"
+        />
+
+        <div className="mt-6 grid gap-6 border border-ink-900/10 bg-ink-950 p-6 text-paper sm:grid-cols-[auto_1fr] sm:items-center sm:p-8">
           <div className="flex gap-8">
             <div>
               <p className="font-jersey text-4xl text-accent-500">

@@ -135,6 +135,7 @@ export default function Inicio() {
           alt="Jugador anotando un mate en una cancha al aire libre, en silueta contra un atardecer anaranjado"
           caption="Un deporte de invasión de campo compartido, nacido en un gimnasio bajo techo y hoy jugado en todo el mundo."
           aspect="wide"
+          parallax
         />
       </section>
 

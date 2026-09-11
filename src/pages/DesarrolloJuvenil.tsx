@@ -4,6 +4,7 @@ import Source from '../components/Source'
 import CourtDivider from '../components/CourtDivider'
 import SectionPhoto from '../components/SectionPhoto'
 import kidsPlaying from '../assets/images/juvenil-kids.jpg'
+import ankleBandage from '../assets/images/juvenil-bandage.jpg'
 import { IconShieldCheck, IconPulse } from '../components/icons'
 import {
   maduracionBiologica,
@@ -90,6 +91,15 @@ export default function DesarrolloJuvenil() {
 
       <section className="section-shell py-14 sm:py-20">
         <SectionHeader eyebrow="Estrategias con respaldo" title="Prevención" lead={prevencion.intro} />
+
+        <SectionPhoto
+          src={ankleBandage}
+          alt="Una deportista vendando el tobillo de un compañero sentado en el suelo de una pista deportiva"
+          caption="El vendaje funcional preventivo es parte de la rutina en deportistas con historial de esguinces."
+          aspect="wide"
+          className="mb-8"
+        />
+
         <ul className="grid gap-4 sm:grid-cols-2">
           {prevencion.items.map((item) => (
             <li key={item} className="flex gap-3 border border-ink-900/10 bg-white/60 p-5 shadow-card">

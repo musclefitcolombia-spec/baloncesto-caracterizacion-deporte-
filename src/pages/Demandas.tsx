@@ -5,6 +5,7 @@ import ResponsiveTable from '../components/ResponsiveTable'
 import CourtDivider from '../components/CourtDivider'
 import SectionPhoto from '../components/SectionPhoto'
 import jumpAction from '../assets/images/demandas-jump.jpg'
+import sprintStart from '../assets/images/demandas-sprint.jpg'
 import { IconPulse, IconTrendUp } from '../components/icons'
 import {
   demandasTecnicoTacticas,
@@ -111,6 +112,14 @@ export default function Demandas() {
           ))}
         </div>
         <p className="mt-3 text-xs text-ink-400">Fuente: {rutasMetabolicas.sistemasSource}</p>
+
+        <SectionPhoto
+          src={sprintStart}
+          alt="Dos atletas en posición de salida de tacos en una pista de atletismo cubierta, listos para un sprint"
+          caption="El sistema ATP-PCr domina justo este tipo de esfuerzo: explosivo y de muy corta duración."
+          aspect="wide"
+          className="mt-8"
+        />
 
         <div className="mt-10 max-w-2xl border-l-[3px] border-l-accent-500 bg-white/60 p-6 shadow-card">
           <p className="text-sm leading-relaxed text-ink-800">{rutasMetabolicas.estudioEsfuerzos}</p>

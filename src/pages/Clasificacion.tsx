@@ -102,6 +102,7 @@ export default function Clasificacion() {
           caption="De la cancha del barrio a la competencia internacional: la misma lógica de juego, distinta escala."
           aspect="wide"
           className="mb-8"
+          parallax
         />
 
         <div className="grid gap-8 border border-ink-900/10 bg-white/60 p-6 shadow-card sm:grid-cols-3 sm:p-8">

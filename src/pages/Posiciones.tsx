@@ -26,6 +26,7 @@ export default function Posiciones() {
           caption="Cada posición aporta una función distinta al mismo objetivo colectivo."
           aspect="wide"
           className="mb-10"
+          parallax
         />
 
         <div className="grid gap-6 lg:grid-cols-5">
