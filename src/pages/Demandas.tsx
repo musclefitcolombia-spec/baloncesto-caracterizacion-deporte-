@@ -39,7 +39,7 @@ export default function Demandas() {
       <section className="section-shell py-14 sm:py-20">
         <SectionHeader eyebrow="Dimensión física" title="Potencia de salto y potencia anaeróbica por posición" lead={dimensionFisica.intro} />
         <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr] lg:items-start">
-          <div>
+          <div className="min-w-0">
             <ResponsiveTable headers={['Posición', 'Potencia de salto', 'Potencia anaeróbica']} caption="Potencia de salto y anaeróbica por posición">
               {dimensionFisica.datos.map((d) => (
                 <tr key={d.posicion} className="border-t border-ink-900/10 odd:bg-ink-950/[0.02]">
