@@ -2,6 +2,8 @@ import PageHeader from '../components/PageHeader'
 import SectionHeader from '../components/SectionHeader'
 import ResponsiveTable from '../components/ResponsiveTable'
 import TrainabilityHeatmap from '../components/TrainabilityHeatmap'
+import SectionPhoto from '../components/SectionPhoto'
+import coachAthlete from '../assets/images/ventanas-coach.jpg'
 import { capacidades, GRUPOS, type GrupoCapacidad } from '../data/fases-sensibles'
 
 const gruposOrden: GrupoCapacidad[] = ['condicional', 'coordinativa', 'psicologico', 'teorico', 'tactico']
@@ -21,6 +23,14 @@ export default function Ventanas() {
           eyebrow="Qué son"
           title="Orientación pedagógica, no un límite rígido"
           lead='Los límites de cada ventana no son absolutos ni existe un consenso cerrado sobre su ubicación exacta. Deben interpretarse como orientación para planificar el entrenamiento a largo plazo, nunca como un límite individual estricto (Fases sensibles..., 2018; Entrenador de Básquet, 2020).'
+        />
+
+        <SectionPhoto
+          src={coachAthlete}
+          alt="Entrenador conversando de cerca con una jugadora joven en una cancha cubierta, con un balón y un silbato en la mano"
+          caption="Reconocer en qué momento del desarrollo está cada deportista es lo que da sentido a estas ventanas."
+          aspect="wide"
+          className="mb-10"
         />
 
         <TrainabilityHeatmap />
