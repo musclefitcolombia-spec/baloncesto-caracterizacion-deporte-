@@ -74,6 +74,27 @@ const FORM_INICIAL: FormState = {
   tallaPadre: '',
 }
 
+// Datos de ejemplo para probar la calculadora de un clic: los valores medios de la
+// posición Pívot, Tabla 1 del artículo base (Abella del Campo et al., 2016) —
+// edad, talla, peso, envergadura y las 8 medidas ISAK (pliegues, diámetros y
+// perímetros). Son datos reales y citados, no inventados para la demostración.
+const EJEMPLO_PIVOT: Partial<FormState> = {
+  edad: '15.40',
+  talla: '193.60',
+  peso: '85.36',
+  envergadura: '197.40',
+  posicion: 'pivot',
+  sexo: 'masculino',
+  triceps: '13.42',
+  subescapular: '10.60',
+  supraespinal: '10.66',
+  piernaMedial: '12.90',
+  humero: '7.26',
+  femur: '9.94',
+  perimetroBrazo: '31.46',
+  perimetroPierna: '39.14',
+}
+
 // Rangos fisiológicos plausibles para la validación (§3). No son límites clínicos
 // estrictos, solo una red de seguridad contra errores de digitación.
 const RANGOS = {
@@ -187,6 +208,13 @@ export default function CalculadoraSomatotipo() {
   }, [mostrarIsak, mostrarContexto])
 
   const campo = (k: keyof FormState) => (v: string) => setForm((f) => ({ ...f, [k]: v }))
+
+  function cargarEjemplo() {
+    setForm((f) => ({ ...f, ...EJEMPLO_PIVOT }))
+    setMostrarIsak(true)
+    setErrores([])
+    setAvisos([])
+  }
 
   function validar(): { ok: boolean; errores: string[]; avisos: string[] } {
     const errs: string[] = []
@@ -572,11 +600,22 @@ export default function CalculadoraSomatotipo() {
           >
             Calcular
           </button>
+          <button
+            type="button"
+            onClick={cargarEjemplo}
+            className="inline-flex items-center gap-2 border border-ink-900/15 px-5 py-3 text-xs font-medium uppercase tracking-wide text-ink-700 transition-colors hover:border-accent-500 hover:text-accent-600"
+          >
+            Cargar datos de ejemplo (Pívot)
+          </button>
           <label className="flex items-center gap-2 text-xs text-ink-700">
             <input type="checkbox" checked={mostrarMedia} onChange={(e) => setMostrarMedia(e.target.checked)} />
             Mostrar también la media cadete del artículo en la somatocarta
           </label>
         </div>
+        <p className="mt-2 text-[11px] text-ink-400">
+          "Cargar datos de ejemplo" usa los valores medios reales de la posición Pívot (Tabla 1, Abella del Campo et al., 2016), no datos
+          inventados — útil para probar el modo completo sin medir a nadie.
+        </p>
 
         <p className="mt-6 max-w-2xl text-xs leading-relaxed text-ink-400">
           Privacidad: todo el cálculo ocurre en tu navegador. No enviamos, registramos ni guardamos los datos que ingreses aquí — ni
