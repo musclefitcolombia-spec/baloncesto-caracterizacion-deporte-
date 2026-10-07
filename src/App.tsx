@@ -10,6 +10,7 @@ import DesarrolloJuvenil from './pages/DesarrolloJuvenil'
 import Atletas from './pages/Atletas'
 import Ventanas from './pages/Ventanas'
 import Deteccion from './pages/Deteccion'
+import CalculadoraSomatotipo from './pages/CalculadoraSomatotipo'
 import Referencias from './pages/Referencias'
 import NotFound from './pages/NotFound'
 
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="atletas" element={<Atletas />} />
         <Route path="ventanas-entrenabilidad" element={<Ventanas />} />
         <Route path="deteccion-talento" element={<Deteccion />} />
+        <Route path="calculadora-somatotipo" element={<CalculadoraSomatotipo />} />
         <Route path="referencias" element={<Referencias />} />
         <Route path="*" element={<NotFound />} />
       </Route>
