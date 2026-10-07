@@ -40,31 +40,30 @@ const PADDING_X = 64
 const PADDING_TOP = 36
 const PADDING_BOTTOM = 56
 
-// Contorno real del somatocarta (Figura 1 del artículo base): un heptágono de
-// lados RECTOS, no un triángulo ni una curva. Su punto más ancho está a media
-// altura (Y≈0), no arriba ni abajo — por eso no se parece a un triángulo simple.
-// Vértices leídos directamente sobre la cuadrícula de la Figura 1 (ejes X de -8 a
-// 8, Y de -8 a 16), en sentido horario desde el vértice de Mesomorfia:
+// Contorno real del somatocarta (Figura 1 del artículo base): un pentágono de
+// lados RECTOS, no un triángulo. Vértice superior puntiagudo (Mesomorfia), dos
+// lados verticales (sin el "bulto" a media altura que tenía la versión anterior
+// — ese punto adicional no va, según la corrección sobre la figura real) y una
+// base plana entre Endomorfia y Ectomorfia.
 const V_MESO = { x: 0, y: 13 } // vértice superior
-const V_HOMBRO_D = { x: 6, y: 6 } // "hombro" superior derecho
-const V_ANCHO_D = { x: 8, y: 0 } // punto más ancho, lado derecho
+const V_HOMBRO_D = { x: 6, y: 6 } // esquina superior derecha
 const V_ECTO = { x: 6, y: -7 } // esquina inferior derecha (Ectomorfia)
 const V_ENDO = { x: -6, y: -7 } // esquina inferior izquierda (Endomorfia)
-const V_ANCHO_I = { x: -8, y: 0 } // punto más ancho, lado izquierdo
-const V_HOMBRO_I = { x: -6, y: 6 } // "hombro" superior izquierdo
-const CONTORNO_SOMATOCARTA = [V_MESO, V_HOMBRO_D, V_ANCHO_D, V_ECTO, V_ENDO, V_ANCHO_I, V_HOMBRO_I]
+const V_HOMBRO_I = { x: -6, y: 6 } // esquina superior izquierda
+const CONTORNO_SOMATOCARTA = [V_MESO, V_HOMBRO_D, V_ECTO, V_ENDO, V_HOMBRO_I]
 
 function puntoMedio(a: { x: number; y: number }, b: { x: number; y: number }) {
   return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }
 }
 
-// Las 3 medianas del triángulo base (Mesomorfia / Endomorfia / Ectomorfia): cada
-// una va de un vértice al punto medio del lado opuesto. Las 3 se cruzan en el
-// mismo punto (el centroide del triángulo base).
-const MEDIANAS: [{ x: number; y: number }, { x: number; y: number }][] = [
-  [V_MESO, puntoMedio(V_ENDO, V_ECTO)],
-  [V_ENDO, puntoMedio(V_MESO, V_ECTO)],
-  [V_ECTO, puntoMedio(V_MESO, V_ENDO)],
+// Líneas guía: de esquina a esquina real del pentágono (no a un punto calculado
+// a medias), cruzando por el centro — tal como se ve en la Figura 1 original.
+// La línea vertical sigue yendo del vértice de Mesomorfia al punto medio de la
+// base (Endomorfia-Ectomorfia no tiene una esquina única en x=0 para conectar).
+const LINEAS_GUIA: [{ x: number; y: number }, { x: number; y: number }][] = [
+  [V_MESO, puntoMedio(V_ENDO, V_ECTO)], // vértice superior -> mitad de la base
+  [V_ENDO, V_HOMBRO_D], // esquina inferior izquierda -> esquina superior derecha
+  [V_ECTO, V_HOMBRO_I], // esquina inferior derecha -> esquina superior izquierda
 ]
 
 const PLOT_W = (X_MAX - X_MIN) * UNIT_X
@@ -206,17 +205,14 @@ export default function Somatocarta({ puntos, zonaIncertidumbre, distancias }: S
             <line key={`gy${t}`} x1={PADDING_X} y1={sy(t)} x2={PADDING_X + PLOT_W} y2={sy(t)} stroke="#1C1814" strokeOpacity={0.06} />
           ))}
 
-          {/* Líneas guía: las 3 medianas del triángulo base (Mesomorfia-Endomorfia-
-              Ectomorfia), cada una de un vértice al punto medio del lado opuesto,
-              cruzando por el centro — líneas completas, como en la Figura 1 del
-              artículo (ahí se ven como un asterisco que atraviesa todo el gráfico,
-              no como 3 medias líneas cortadas en el centro). */}
-          {MEDIANAS.map(([a, b], i) => (
+          {/* Líneas guía de esquina a esquina real del pentágono, cruzando por el
+              centro — como en la Figura 1 del artículo. */}
+          {LINEAS_GUIA.map(([a, b], i) => (
             <line key={i} x1={sx(a.x)} y1={sy(a.y)} x2={sx(b.x)} y2={sy(b.y)} stroke="#1C1814" strokeOpacity={0.22} strokeDasharray="3 3" />
           ))}
 
-          {/* Contorno real del somatocarta: un heptágono de lados rectos, con el punto
-              más ancho a media altura (no arriba ni abajo) — igual que en la Figura 1
+          {/* Contorno real del somatocarta: un pentágono de lados rectos (vértice
+              puntiagudo arriba, lados verticales, base plana), como en la Figura 1
               del artículo base. */}
           <polygon
             points={CONTORNO_SOMATOCARTA.map((v) => `${sx(v.x)},${sy(v.y)}`).join(' ')}
