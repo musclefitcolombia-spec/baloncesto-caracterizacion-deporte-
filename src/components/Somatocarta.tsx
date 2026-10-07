@@ -30,7 +30,12 @@ const X_MIN = -8
 const X_MAX = 8
 const Y_MIN = -8
 const Y_MAX = 16
-const UNIT = 18
+// La Figura 1 del artículo no usa la misma escala en los dos ejes: el gráfico es
+// mucho más ancho que alto (aprox. 2,5 veces más píxeles por unidad en X que en
+// Y), no un cuadrado. Con una sola escala (1 unidad = mismo tamaño en ambos ejes)
+// el heptágono sale angosto y alto, muy distinto al original.
+const UNIT_X = 26
+const UNIT_Y = 10
 const PADDING_X = 64
 const PADDING_TOP = 36
 const PADDING_BOTTOM = 56
@@ -49,16 +54,29 @@ const V_ANCHO_I = { x: -8, y: 0 } // punto más ancho, lado izquierdo
 const V_HOMBRO_I = { x: -6, y: 6 } // "hombro" superior izquierdo
 const CONTORNO_SOMATOCARTA = [V_MESO, V_HOMBRO_D, V_ANCHO_D, V_ECTO, V_ENDO, V_ANCHO_I, V_HOMBRO_I]
 
-const PLOT_W = (X_MAX - X_MIN) * UNIT
-const PLOT_H = (Y_MAX - Y_MIN) * UNIT
+function puntoMedio(a: { x: number; y: number }, b: { x: number; y: number }) {
+  return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }
+}
+
+// Las 3 medianas del triángulo base (Mesomorfia / Endomorfia / Ectomorfia): cada
+// una va de un vértice al punto medio del lado opuesto. Las 3 se cruzan en el
+// mismo punto (el centroide del triángulo base).
+const MEDIANAS: [{ x: number; y: number }, { x: number; y: number }][] = [
+  [V_MESO, puntoMedio(V_ENDO, V_ECTO)],
+  [V_ENDO, puntoMedio(V_MESO, V_ECTO)],
+  [V_ECTO, puntoMedio(V_MESO, V_ENDO)],
+]
+
+const PLOT_W = (X_MAX - X_MIN) * UNIT_X
+const PLOT_H = (Y_MAX - Y_MIN) * UNIT_Y
 const SVG_W = PLOT_W + PADDING_X * 2
 const SVG_H = PLOT_H + PADDING_TOP + PADDING_BOTTOM
 
 function sx(x: number) {
-  return PADDING_X + (x - X_MIN) * UNIT
+  return PADDING_X + (x - X_MIN) * UNIT_X
 }
 function sy(y: number) {
-  return PADDING_TOP + (Y_MAX - y) * UNIT
+  return PADDING_TOP + (Y_MAX - y) * UNIT_Y
 }
 
 const COLOR: Record<TipoPunto, string> = {
@@ -188,12 +206,14 @@ export default function Somatocarta({ puntos, zonaIncertidumbre, distancias }: S
             <line key={`gy${t}`} x1={PADDING_X} y1={sy(t)} x2={PADDING_X + PLOT_W} y2={sy(t)} stroke="#1C1814" strokeOpacity={0.06} />
           ))}
 
-          {/* Líneas guía centrales */}
-          {/* Líneas guía desde el centro a cada vértice, como en la Figura 1 del artículo
-              (ahí se ven como un asterisco, no como una simple cruz). */}
-          <line x1={sx(0)} y1={sy(0)} x2={sx(V_MESO.x)} y2={sy(V_MESO.y)} stroke="#1C1814" strokeOpacity={0.18} strokeDasharray="3 3" />
-          <line x1={sx(0)} y1={sy(0)} x2={sx(V_ENDO.x)} y2={sy(V_ENDO.y)} stroke="#1C1814" strokeOpacity={0.18} strokeDasharray="3 3" />
-          <line x1={sx(0)} y1={sy(0)} x2={sx(V_ECTO.x)} y2={sy(V_ECTO.y)} stroke="#1C1814" strokeOpacity={0.18} strokeDasharray="3 3" />
+          {/* Líneas guía: las 3 medianas del triángulo base (Mesomorfia-Endomorfia-
+              Ectomorfia), cada una de un vértice al punto medio del lado opuesto,
+              cruzando por el centro — líneas completas, como en la Figura 1 del
+              artículo (ahí se ven como un asterisco que atraviesa todo el gráfico,
+              no como 3 medias líneas cortadas en el centro). */}
+          {MEDIANAS.map(([a, b], i) => (
+            <line key={i} x1={sx(a.x)} y1={sy(a.y)} x2={sx(b.x)} y2={sy(b.y)} stroke="#1C1814" strokeOpacity={0.22} strokeDasharray="3 3" />
+          ))}
 
           {/* Contorno real del somatocarta: un heptágono de lados rectos, con el punto
               más ancho a media altura (no arriba ni abajo) — igual que en la Figura 1
@@ -235,8 +255,8 @@ export default function Somatocarta({ puntos, zonaIncertidumbre, distancias }: S
             <ellipse
               cx={sx(zonaIncertidumbre.centro.x)}
               cy={sy(zonaIncertidumbre.centro.y)}
-              rx={zonaIncertidumbre.radioX * UNIT}
-              ry={zonaIncertidumbre.radioY * UNIT}
+              rx={zonaIncertidumbre.radioX * UNIT_X}
+              ry={zonaIncertidumbre.radioY * UNIT_Y}
               fill="#E8720C"
               fillOpacity={0.12}
               stroke="#E8720C"
