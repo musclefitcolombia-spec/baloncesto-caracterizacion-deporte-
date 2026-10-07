@@ -35,6 +35,25 @@ const PADDING_X = 64
 const PADDING_TOP = 36
 const PADDING_BOTTOM = 56
 
+// Vértices del contorno del somatocarta (triángulo de Reuleaux: lados curvos, no
+// rectos), estimados a partir de la Figura 1 del artículo base. Los puntos de
+// control de cada curva se desplazan hacia afuera del centroide del triángulo recto
+// para lograr el lado abombado característico de esta gráfica.
+const V_MESO = { x: 0, y: 13 }
+const V_ECTO = { x: 8, y: -7 }
+const V_ENDO = { x: -8, y: -7 }
+const CENTROIDE = {
+  x: (V_MESO.x + V_ECTO.x + V_ENDO.x) / 3,
+  y: (V_MESO.y + V_ECTO.y + V_ENDO.y) / 3,
+}
+function puntoControl(a: { x: number; y: number }, b: { x: number; y: number }, factor = 0.4) {
+  const medio = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }
+  return { x: medio.x + (medio.x - CENTROIDE.x) * factor, y: medio.y + (medio.y - CENTROIDE.y) * factor }
+}
+const C_MESO_ECTO = puntoControl(V_MESO, V_ECTO)
+const C_ECTO_ENDO = puntoControl(V_ECTO, V_ENDO)
+const C_ENDO_MESO = puntoControl(V_ENDO, V_MESO)
+
 const PLOT_W = (X_MAX - X_MIN) * UNIT
 const PLOT_H = (Y_MAX - Y_MIN) * UNIT
 const SVG_W = PLOT_W + PADDING_X * 2
@@ -175,26 +194,34 @@ export default function Somatocarta({ puntos, zonaIncertidumbre, distancias }: S
           ))}
 
           {/* Líneas guía centrales */}
-          <line x1={sx(0)} y1={PADDING_TOP} x2={sx(0)} y2={PADDING_TOP + PLOT_H} stroke="#1C1814" strokeOpacity={0.18} strokeDasharray="3 3" />
-          <line x1={PADDING_X} y1={sy(0)} x2={PADDING_X + PLOT_W} y2={sy(0)} stroke="#1C1814" strokeOpacity={0.18} strokeDasharray="3 3" />
+          {/* Líneas guía desde el centro a cada vértice, como en la Figura 1 del artículo
+              (ahí se ven como un asterisco, no como una simple cruz). */}
+          <line x1={sx(0)} y1={sy(0)} x2={sx(V_MESO.x)} y2={sy(V_MESO.y)} stroke="#1C1814" strokeOpacity={0.18} strokeDasharray="3 3" />
+          <line x1={sx(0)} y1={sy(0)} x2={sx(V_ENDO.x)} y2={sy(V_ENDO.y)} stroke="#1C1814" strokeOpacity={0.18} strokeDasharray="3 3" />
+          <line x1={sx(0)} y1={sy(0)} x2={sx(V_ECTO.x)} y2={sy(V_ECTO.y)} stroke="#1C1814" strokeOpacity={0.18} strokeDasharray="3 3" />
 
-          {/* Triángulo decorativo del somatocarta clásico (vértices aproximados, como en la Figura 1 del artículo) */}
-          <polygon
-            points={`${sx(-7)},${sy(-6)} ${sx(7)},${sy(-6)} ${sx(0)},${sy(12)}`}
+          {/* Contorno del somatocarta clásico: un "triángulo de Reuleaux" (lados curvos,
+              no rectos) — así es como se ve realmente en la Figura 1 del artículo base,
+              no como un triángulo de lados rectos. Vértices aproximados a partir de esa
+              figura; curvas de Bézier cuadráticas con el punto de control desplazado hacia
+              afuera del centroide para lograr el abombado característico de cada lado. */}
+          <path
+            d={`M ${sx(V_MESO.x)} ${sy(V_MESO.y)} Q ${sx(C_MESO_ECTO.x)} ${sy(C_MESO_ECTO.y)} ${sx(V_ECTO.x)} ${sy(V_ECTO.y)} Q ${sx(C_ECTO_ENDO.x)} ${sy(C_ECTO_ENDO.y)} ${sx(V_ENDO.x)} ${sy(V_ENDO.y)} Q ${sx(C_ENDO_MESO.x)} ${sy(C_ENDO_MESO.y)} ${sx(V_MESO.x)} ${sy(V_MESO.y)} Z`}
             fill="none"
             stroke="#1C1814"
             strokeOpacity={0.35}
             strokeWidth={1.5}
+            strokeLinejoin="round"
           />
 
           {/* Etiquetas de los vértices */}
-          <text x={sx(0)} y={sy(14.2)} textAnchor="middle" className="fill-ink-950" fontSize={13} fontWeight={600}>
+          <text x={sx(V_MESO.x)} y={sy(V_MESO.y + 1.4)} textAnchor="middle" className="fill-ink-950" fontSize={13} fontWeight={600}>
             Mesomorfia
           </text>
-          <text x={sx(-7)} y={sy(-7.2)} textAnchor="start" className="fill-ink-950" fontSize={13} fontWeight={600}>
+          <text x={sx(V_ENDO.x) - 4} y={sy(V_ENDO.y - 1.2)} textAnchor="start" className="fill-ink-950" fontSize={13} fontWeight={600}>
             Endomorfia
           </text>
-          <text x={sx(7)} y={sy(-7.2)} textAnchor="end" className="fill-ink-950" fontSize={13} fontWeight={600}>
+          <text x={sx(V_ECTO.x) + 4} y={sy(V_ECTO.y - 1.2)} textAnchor="end" className="fill-ink-950" fontSize={13} fontWeight={600}>
             Ectomorfia
           </text>
 
