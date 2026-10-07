@@ -40,28 +40,24 @@ const PADDING_X = 64
 const PADDING_TOP = 36
 const PADDING_BOTTOM = 56
 
-// Contorno real del somatocarta (Figura 1 del artículo base): un pentágono de
-// lados RECTOS, no un triángulo. Vértice superior puntiagudo (Mesomorfia), dos
-// lados verticales (sin el "bulto" a media altura que tenía la versión anterior
-// — ese punto adicional no va, según la corrección sobre la figura real) y una
-// base plana entre Endomorfia y Ectomorfia.
-const V_MESO = { x: 0, y: 13 } // vértice superior
-const V_HOMBRO_D = { x: 6, y: 6 } // esquina superior derecha
-const V_ECTO = { x: 6, y: -7 } // esquina inferior derecha (Ectomorfia)
-const V_ENDO = { x: -6, y: -7 } // esquina inferior izquierda (Endomorfia)
-const V_HOMBRO_I = { x: -6, y: 6 } // esquina superior izquierda
-const CONTORNO_SOMATOCARTA = [V_MESO, V_HOMBRO_D, V_ECTO, V_ENDO, V_HOMBRO_I]
+// Contorno real del somatocarta (Figura 1 del artículo base), releído con una
+// foto más clara: vértice superior puntiagudo cerca del máximo del eje Y; los
+// lados NO son verticales, se inclinan hacia afuera bajando desde el "hombro"
+// hasta la esquina inferior (que llega hasta el borde del eje, x=±8); y la base
+// no es plana, tiene un sexto vértice al centro que baja un poco más (una "v"
+// poco pronunciada), por eso Endomorfia/Ectomorfia no son el punto más bajo.
+const V_MESO = { x: 0, y: 15 } // vértice superior
+const V_HOMBRO_D = { x: 6, y: 6 } // "hombro" superior derecho
+const V_ECTO = { x: 8, y: -6 } // esquina inferior derecha (Ectomorfia)
+const V_BASE = { x: 0, y: -8 } // punta de la "v" al centro de la base
+const V_ENDO = { x: -8, y: -6 } // esquina inferior izquierda (Endomorfia)
+const V_HOMBRO_I = { x: -6, y: 6 } // "hombro" superior izquierdo
+const CONTORNO_SOMATOCARTA = [V_MESO, V_HOMBRO_D, V_ECTO, V_BASE, V_ENDO, V_HOMBRO_I]
 
-function puntoMedio(a: { x: number; y: number }, b: { x: number; y: number }) {
-  return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }
-}
-
-// Líneas guía: de esquina a esquina real del pentágono (no a un punto calculado
-// a medias), cruzando por el centro — tal como se ve en la Figura 1 original.
-// La línea vertical sigue yendo del vértice de Mesomorfia al punto medio de la
-// base (Endomorfia-Ectomorfia no tiene una esquina única en x=0 para conectar).
+// Líneas guía: de esquina a esquina real del contorno, cruzando por el centro —
+// tal como se ve en la Figura 1 original.
 const LINEAS_GUIA: [{ x: number; y: number }, { x: number; y: number }][] = [
-  [V_MESO, puntoMedio(V_ENDO, V_ECTO)], // vértice superior -> mitad de la base
+  [V_MESO, V_BASE], // vértice superior -> punta de la base
   [V_ENDO, V_HOMBRO_D], // esquina inferior izquierda -> esquina superior derecha
   [V_ECTO, V_HOMBRO_I], // esquina inferior derecha -> esquina superior izquierda
 ]
