@@ -19,7 +19,7 @@ export default function Navbar() {
   }, [open])
 
   return (
-    <header className="sticky top-0 z-50 border-b border-ink-900/10 bg-ink-950/95 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-ink-900/10 bg-ink-950/95 backdrop-blur print:hidden">
       <div className="section-shell flex h-16 items-center justify-between">
         <NavLink to="/" className="flex shrink-0 items-center gap-2 text-paper" aria-label="Ir a inicio">
           <IconBall className="h-6 w-6 text-accent-500" />

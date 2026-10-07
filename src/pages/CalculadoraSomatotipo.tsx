@@ -1,4 +1,4 @@
-import { useId, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import PageHeader from '../components/PageHeader'
 import SectionHeader from '../components/SectionHeader'
 import ResponsiveTable from '../components/ResponsiveTable'
@@ -164,6 +164,27 @@ export default function CalculadoraSomatotipo() {
   const [errores, setErrores] = useState<string[]>([])
   const [avisos, setAvisos] = useState<string[]>([])
   const [resultado, setResultado] = useState<Resultado | null>(null)
+
+  // Al imprimir, se abren los paneles plegables (ISAK, contexto) para que la
+  // entrada de datos quede completa en el PDF, y se restauran al terminar.
+  const estadoPrevioImpresion = useRef({ isak: false, contexto: false })
+  useEffect(() => {
+    const alAntesDeImprimir = () => {
+      estadoPrevioImpresion.current = { isak: mostrarIsak, contexto: mostrarContexto }
+      setMostrarIsak(true)
+      setMostrarContexto(true)
+    }
+    const alDespuesDeImprimir = () => {
+      setMostrarIsak(estadoPrevioImpresion.current.isak)
+      setMostrarContexto(estadoPrevioImpresion.current.contexto)
+    }
+    window.addEventListener('beforeprint', alAntesDeImprimir)
+    window.addEventListener('afterprint', alDespuesDeImprimir)
+    return () => {
+      window.removeEventListener('beforeprint', alAntesDeImprimir)
+      window.removeEventListener('afterprint', alDespuesDeImprimir)
+    }
+  }, [mostrarIsak, mostrarContexto])
 
   const campo = (k: keyof FormState) => (v: string) => setForm((f) => ({ ...f, [k]: v }))
 
@@ -610,7 +631,7 @@ function ResultadoSomatotipo({ resultado: r, form }: { resultado: Resultado; for
 
   return (
     <section className="section-shell py-4 sm:py-6" aria-live="polite">
-      <div className="border-t-2 border-accent-500 bg-ink-950 p-6 text-paper sm:p-10">
+      <div className="border-t-2 border-accent-500 bg-ink-950 p-6 text-paper sm:p-10 print:break-inside-avoid">
         <p className="kicker">Resultado</p>
         <h2 className="mt-2 font-display text-2xl uppercase tracking-tight sm:text-3xl">
           {r.modo === 'completo' ? r.categoria : 'Estimación sin pliegues (modo rápido)'}
@@ -645,7 +666,7 @@ function ResultadoSomatotipo({ resultado: r, form }: { resultado: Resultado; for
         </div>
       </div>
 
-      <div className="border border-t-0 border-ink-900/10 bg-white/60 p-6 shadow-card sm:p-10">
+      <div className="border border-t-0 border-ink-900/10 bg-white/60 p-6 shadow-card sm:p-10 print:break-inside-avoid">
         <Somatocarta puntos={r.puntosSomatocarta} zonaIncertidumbre={r.zonaIncertidumbre} distancias={r.distanciasElite} />
       </div>
 
@@ -658,7 +679,7 @@ function ResultadoSomatotipo({ resultado: r, form }: { resultado: Resultado; for
       )}
 
       {sexoValido && r.comparaciones.length > 0 && (
-        <div className="border border-t-0 border-ink-900/10 bg-white/60 p-6 shadow-card sm:p-10">
+        <div className="border border-t-0 border-ink-900/10 bg-white/60 p-6 shadow-card sm:p-10 print:break-inside-avoid">
           <h3 className="font-display text-lg uppercase tracking-tight text-ink-950">Comparación con la referencia de la posición</h3>
           <p className="mt-1 text-xs text-ink-500">
             Fuente de comparación: {r.fuenteComparacion === 'posicion' ? `muestra cadete de ${NOMBRES_POSICION[posicion]}` : 'muestra cadete total (n=20)'}
@@ -687,7 +708,7 @@ function ResultadoSomatotipo({ resultado: r, form }: { resultado: Resultado; for
       )}
 
       {sexoValido && r.aspectos.length > 0 && (
-        <div className="border border-t-0 border-ink-900/10 bg-white/60 p-6 shadow-card sm:p-10">
+        <div className="border border-t-0 border-ink-900/10 bg-white/60 p-6 shadow-card sm:p-10 print:break-inside-avoid">
           <h3 className="font-display text-lg uppercase tracking-tight text-ink-950">Recomendaciones</h3>
 
           <div className="mt-4">
@@ -730,7 +751,7 @@ function ResultadoSomatotipo({ resultado: r, form }: { resultado: Resultado; for
       )}
 
       {sexoValido && (elite || referente) && (
-        <div className="border border-t-0 border-ink-900/10 bg-white/60 p-6 shadow-card sm:p-10">
+        <div className="border border-t-0 border-ink-900/10 bg-white/60 p-6 shadow-card sm:p-10 print:break-inside-avoid">
           <h3 className="font-display text-lg uppercase tracking-tight text-ink-950">Referencias de esta posición</h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             {elite ? (
@@ -812,8 +833,31 @@ function CopiarBoton({ resultado, form }: { resultado: Resultado; form: FormStat
 }
 
 function ComoSeCalculo() {
+  const detailsRef = useRef<HTMLDetailsElement>(null)
+
+  // El atributo "open" de <details> no se puede forzar por CSS (print:open no
+  // existe como propiedad real): se abre y se cierra a mano con beforeprint/afterprint.
+  useEffect(() => {
+    const el = detailsRef.current
+    if (!el) return
+    let abiertoAntes = el.open
+    const alAntesDeImprimir = () => {
+      abiertoAntes = el.open
+      el.open = true
+    }
+    const alDespuesDeImprimir = () => {
+      el.open = abiertoAntes
+    }
+    window.addEventListener('beforeprint', alAntesDeImprimir)
+    window.addEventListener('afterprint', alDespuesDeImprimir)
+    return () => {
+      window.removeEventListener('beforeprint', alAntesDeImprimir)
+      window.removeEventListener('afterprint', alDespuesDeImprimir)
+    }
+  }, [])
+
   return (
-    <details className="border border-t-0 border-ink-900/10 bg-white/60 p-6 shadow-card sm:p-10 print:open">
+    <details ref={detailsRef} className="border border-t-0 border-ink-900/10 bg-white/60 p-6 shadow-card sm:p-10">
       <summary className="cursor-pointer font-display text-lg uppercase tracking-tight text-ink-950">Cómo se calculó</summary>
       <div className="mt-5 space-y-5 text-sm leading-relaxed text-ink-700">
         <div>

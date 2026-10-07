@@ -41,3 +41,24 @@
     @apply h-px w-full bg-ink-900/10;
   }
 }
+
+@media print {
+  /* Sin esto, muchos navegadores omiten los colores de fondo al imprimir
+     (fondos oscuros, acentos de tabla, etc.) aunque la casilla "Gráficos de
+     fondo" del diálogo de impresión esté desmarcada. */
+  * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  @page {
+    margin: 14mm;
+  }
+
+  /* El header con position: sticky duplica/superpone su contenido al paginar
+     en Chromium; se oculta explícitamente por si algún print:hidden no cubre
+     un caso puntual. */
+  header.sticky {
+    position: static !important;
+  }
+}

@@ -315,7 +315,7 @@ export default function Somatocarta({ puntos, zonaIncertidumbre, distancias }: S
         )}
       </ul>
 
-      <div className="mt-4 text-center">
+      <div className="mt-4 text-center print:hidden">
         <button
           type="button"
           onClick={descargarPNG}
