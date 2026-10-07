@@ -35,24 +35,19 @@ const PADDING_X = 64
 const PADDING_TOP = 36
 const PADDING_BOTTOM = 56
 
-// Vértices del contorno del somatocarta (triángulo de Reuleaux: lados curvos, no
-// rectos), estimados a partir de la Figura 1 del artículo base. Los puntos de
-// control de cada curva se desplazan hacia afuera del centroide del triángulo recto
-// para lograr el lado abombado característico de esta gráfica.
-const V_MESO = { x: 0, y: 13 }
-const V_ECTO = { x: 8, y: -7 }
-const V_ENDO = { x: -8, y: -7 }
-const CENTROIDE = {
-  x: (V_MESO.x + V_ECTO.x + V_ENDO.x) / 3,
-  y: (V_MESO.y + V_ECTO.y + V_ENDO.y) / 3,
-}
-function puntoControl(a: { x: number; y: number }, b: { x: number; y: number }, factor = 0.4) {
-  const medio = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }
-  return { x: medio.x + (medio.x - CENTROIDE.x) * factor, y: medio.y + (medio.y - CENTROIDE.y) * factor }
-}
-const C_MESO_ECTO = puntoControl(V_MESO, V_ECTO)
-const C_ECTO_ENDO = puntoControl(V_ECTO, V_ENDO)
-const C_ENDO_MESO = puntoControl(V_ENDO, V_MESO)
+// Contorno real del somatocarta (Figura 1 del artículo base): un heptágono de
+// lados RECTOS, no un triángulo ni una curva. Su punto más ancho está a media
+// altura (Y≈0), no arriba ni abajo — por eso no se parece a un triángulo simple.
+// Vértices leídos directamente sobre la cuadrícula de la Figura 1 (ejes X de -8 a
+// 8, Y de -8 a 16), en sentido horario desde el vértice de Mesomorfia:
+const V_MESO = { x: 0, y: 13 } // vértice superior
+const V_HOMBRO_D = { x: 6, y: 6 } // "hombro" superior derecho
+const V_ANCHO_D = { x: 8, y: 0 } // punto más ancho, lado derecho
+const V_ECTO = { x: 6, y: -7 } // esquina inferior derecha (Ectomorfia)
+const V_ENDO = { x: -6, y: -7 } // esquina inferior izquierda (Endomorfia)
+const V_ANCHO_I = { x: -8, y: 0 } // punto más ancho, lado izquierdo
+const V_HOMBRO_I = { x: -6, y: 6 } // "hombro" superior izquierdo
+const CONTORNO_SOMATOCARTA = [V_MESO, V_HOMBRO_D, V_ANCHO_D, V_ECTO, V_ENDO, V_ANCHO_I, V_HOMBRO_I]
 
 const PLOT_W = (X_MAX - X_MIN) * UNIT
 const PLOT_H = (Y_MAX - Y_MIN) * UNIT
@@ -200,16 +195,14 @@ export default function Somatocarta({ puntos, zonaIncertidumbre, distancias }: S
           <line x1={sx(0)} y1={sy(0)} x2={sx(V_ENDO.x)} y2={sy(V_ENDO.y)} stroke="#1C1814" strokeOpacity={0.18} strokeDasharray="3 3" />
           <line x1={sx(0)} y1={sy(0)} x2={sx(V_ECTO.x)} y2={sy(V_ECTO.y)} stroke="#1C1814" strokeOpacity={0.18} strokeDasharray="3 3" />
 
-          {/* Contorno del somatocarta clásico: un "triángulo de Reuleaux" (lados curvos,
-              no rectos) — así es como se ve realmente en la Figura 1 del artículo base,
-              no como un triángulo de lados rectos. Vértices aproximados a partir de esa
-              figura; curvas de Bézier cuadráticas con el punto de control desplazado hacia
-              afuera del centroide para lograr el abombado característico de cada lado. */}
-          <path
-            d={`M ${sx(V_MESO.x)} ${sy(V_MESO.y)} Q ${sx(C_MESO_ECTO.x)} ${sy(C_MESO_ECTO.y)} ${sx(V_ECTO.x)} ${sy(V_ECTO.y)} Q ${sx(C_ECTO_ENDO.x)} ${sy(C_ECTO_ENDO.y)} ${sx(V_ENDO.x)} ${sy(V_ENDO.y)} Q ${sx(C_ENDO_MESO.x)} ${sy(C_ENDO_MESO.y)} ${sx(V_MESO.x)} ${sy(V_MESO.y)} Z`}
+          {/* Contorno real del somatocarta: un heptágono de lados rectos, con el punto
+              más ancho a media altura (no arriba ni abajo) — igual que en la Figura 1
+              del artículo base. */}
+          <polygon
+            points={CONTORNO_SOMATOCARTA.map((v) => `${sx(v.x)},${sy(v.y)}`).join(' ')}
             fill="none"
             stroke="#1C1814"
-            strokeOpacity={0.35}
+            strokeOpacity={0.4}
             strokeWidth={1.5}
             strokeLinejoin="round"
           />
