@@ -1,7 +1,13 @@
 import { useId, useRef, useState } from 'react'
 import type { CoordenadasSomatocarta, Somatotipo } from '../lib/somatotipo'
 
-export type TipoPunto = 'atleta' | 'elite' | 'referente' | 'media'
+// Los 4 tipos de posición ('base' | 'escolta' | 'alero' | 'pivot') representan los
+// puntos de élite internacional de la Figura 1 del artículo base, con el mismo
+// marcador y color que usa esa figura (círculo azul, cuadrado rojo, triángulo
+// verde, aspa morada). 'media' es la media de la muestra cadete total (línea
+// cian), también parte de esa misma figura. 'atleta' y 'referente' son capas
+// propias de esta calculadora (el jugador evaluado y el jugador NBA de contraste).
+export type TipoPunto = 'atleta' | 'base' | 'escolta' | 'alero' | 'pivot' | 'media' | 'referente'
 
 export interface PuntoSomatocarta {
   id: string
@@ -10,6 +16,8 @@ export interface PuntoSomatocarta {
   somatotipo: Somatotipo
   coords: CoordenadasSomatocarta
   detalle?: string
+  /** false atenúa el marcador (p. ej. posiciones de élite distintas a la seleccionada). */
+  enfasis?: boolean
 }
 
 export interface ZonaIncertidumbre {
@@ -76,26 +84,34 @@ function sy(y: number) {
 
 const COLOR: Record<TipoPunto, string> = {
   atleta: '#E8720C',
-  elite: '#1C1814',
+  base: '#2563EB',
+  escolta: '#DC2626',
+  alero: '#16A34A',
+  pivot: '#9333EA',
+  media: '#0891B2',
   referente: '#794C20',
-  media: '#976127',
 }
 
 const ETIQUETA_TIPO: Record<TipoPunto, string> = {
-  atleta: 'Atleta',
-  elite: 'Élite de la posición',
+  atleta: 'Atleta (tú)',
+  base: 'Élite — Base',
+  escolta: 'Élite — Escolta',
+  alero: 'Élite — Alero',
+  pivot: 'Élite — Pívot',
+  media: 'Media de la muestra cadete (artículo)',
   referente: 'Jugador referente actual',
-  media: 'Media cadete (artículo)',
 }
 
-function Marcador({ tipo, cx, cy, focused }: { tipo: TipoPunto; cx: number; cy: number; focused: boolean }) {
+function Marcador({ tipo, cx, cy, focused, opacity = 1 }: { tipo: TipoPunto; cx: number; cy: number; focused: boolean; opacity?: number }) {
   const color = COLOR[tipo]
   const r = focused ? 8 : 6.5
   const strokeW = focused ? 2.5 : 1.5
   switch (tipo) {
     case 'atleta':
-      return <circle cx={cx} cy={cy} r={r} fill={color} stroke="#FAF5EC" strokeWidth={strokeW} />
-    case 'elite':
+      return <circle cx={cx} cy={cy} r={r} fill={color} stroke="#FAF5EC" strokeWidth={strokeW} opacity={opacity} />
+    case 'base':
+      return <circle cx={cx} cy={cy} r={r} fill={color} stroke="#FAF5EC" strokeWidth={strokeW} opacity={opacity} />
+    case 'escolta':
       return (
         <rect
           x={cx - r}
@@ -105,24 +121,45 @@ function Marcador({ tipo, cx, cy, focused }: { tipo: TipoPunto; cx: number; cy: 
           fill={color}
           stroke="#FAF5EC"
           strokeWidth={strokeW}
+          opacity={opacity}
         />
       )
-    case 'referente':
+    case 'alero':
       return (
         <polygon
           points={`${cx},${cy - r - 1} ${cx - r - 1},${cy + r} ${cx + r + 1},${cy + r}`}
           fill={color}
           stroke="#FAF5EC"
           strokeWidth={strokeW}
+          opacity={opacity}
         />
       )
+    case 'pivot':
+      return (
+        <g opacity={opacity}>
+          <line x1={cx - r} y1={cy - r} x2={cx + r} y2={cy + r} stroke={color} strokeWidth={strokeW + 1.5} strokeLinecap="round" />
+          <line x1={cx - r} y1={cy + r} x2={cx + r} y2={cy - r} stroke={color} strokeWidth={strokeW + 1.5} strokeLinecap="round" />
+        </g>
+      )
     case 'media':
+      return (
+        <rect
+          x={cx - r - 2}
+          y={cy - strokeW}
+          width={(r + 2) * 2}
+          height={strokeW * 2}
+          fill={color}
+          opacity={opacity}
+        />
+      )
+    case 'referente':
       return (
         <polygon
           points={`${cx},${cy - r - 1} ${cx + r + 1},${cy} ${cx},${cy + r + 1} ${cx - r - 1},${cy}`}
           fill={color}
           stroke="#FAF5EC"
           strokeWidth={strokeW}
+          opacity={opacity}
         />
       )
   }
@@ -134,8 +171,11 @@ export default function Somatocarta({ puntos, zonaIncertidumbre, distancias }: S
   const titleId = useId()
   const descId = useId()
 
+  const POSICION_TIPOS: TipoPunto[] = ['base', 'escolta', 'alero', 'pivot']
   const atleta = puntos.find((p) => p.tipo === 'atleta')
-  const elite = puntos.find((p) => p.tipo === 'elite')
+  // El punto de élite "destacado" es el de la posición seleccionada (enfasis !== false);
+  // las otras 3 posiciones de élite se grafican atenuadas, solo como referencia de la Figura 1.
+  const elite = puntos.find((p) => POSICION_TIPOS.includes(p.tipo) && p.enfasis !== false)
 
   const ticksX = [-8, -6, -4, -2, 0, 2, 4, 6, 8]
   const ticksY = [-8, -4, 0, 4, 8, 12, 16]
@@ -290,7 +330,7 @@ export default function Somatocarta({ puntos, zonaIncertidumbre, distancias }: S
                 onMouseLeave={() => setActivo(null)}
                 className="cursor-pointer outline-none"
               >
-                <Marcador tipo={p.tipo} cx={cx} cy={cy} focused={focused} />
+                <Marcador tipo={p.tipo} cx={cx} cy={cy} focused={focused} opacity={p.enfasis === false && !focused ? 0.4 : 1} />
                 {focused && (
                   <g>
                     <rect
@@ -328,7 +368,7 @@ export default function Somatocarta({ puntos, zonaIncertidumbre, distancias }: S
 
       {/* Leyenda */}
       <ul className="mt-4 flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-ink-700">
-        {(['atleta', 'elite', 'referente', 'media'] as TipoPunto[]).map(
+        {(['atleta', 'base', 'escolta', 'alero', 'pivot', 'media', 'referente'] as TipoPunto[]).map(
           (t) =>
             puntos.some((p) => p.tipo === t) && (
               <li key={t} className="flex items-center gap-1.5">

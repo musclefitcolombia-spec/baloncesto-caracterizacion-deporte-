@@ -24,7 +24,6 @@ import {
 } from '../lib/recomendaciones'
 import {
   jugadorReferentePorPosicion,
-  muestraCadetePorPosicion,
   muestraCadeteTotal,
   NOMBRES_POSICION,
   somatotipoElitePorPosicion,
@@ -181,7 +180,7 @@ export default function CalculadoraSomatotipo() {
   const [form, setForm] = useState<FormState>(FORM_INICIAL)
   const [mostrarIsak, setMostrarIsak] = useState(false)
   const [mostrarContexto, setMostrarContexto] = useState(false)
-  const [mostrarMedia, setMostrarMedia] = useState(false)
+  const [mostrarMedia, setMostrarMedia] = useState(true)
   const [errores, setErrores] = useState<string[]>([])
   const [avisos, setAvisos] = useState<string[]>([])
   const [resultado, setResultado] = useState<Resultado | null>(null)
@@ -371,10 +370,26 @@ export default function CalculadoraSomatotipo() {
       })
     }
 
-    if (sexoValido && elite) {
-      const coordsElite = coordenadasSomatocarta(elite)
-      puntos.push({ id: 'elite', tipo: 'elite', label: `Élite — ${NOMBRES_POSICION[posicion]}`, somatotipo: elite, coords: coordsElite })
-      if (modo === 'completo') {
+    // Las 4 posiciones con somatotipo de élite publicado (no hay dato para
+    // ala-pívot) se grafican siempre, como en la Figura 1 del artículo base; la
+    // de la posición seleccionada queda resaltada y las otras 3, atenuadas.
+    const POSICIONES_ELITE = ['base', 'escolta', 'alero', 'pivot'] as const satisfies readonly PosicionId[]
+    if (sexoValido) {
+      for (const pos of POSICIONES_ELITE) {
+        const eliteDePos = somatotipoElitePorPosicion[pos]
+        if (!eliteDePos) continue
+        const coordsEliteDePos = coordenadasSomatocarta(eliteDePos)
+        puntos.push({
+          id: `elite-${pos}`,
+          tipo: pos,
+          label: `Élite — ${NOMBRES_POSICION[pos]}${pos === posicion ? ' (tu posición)' : ''}`,
+          somatotipo: eliteDePos,
+          coords: coordsEliteDePos,
+          enfasis: pos === posicion,
+        })
+      }
+      if (elite && modo === 'completo') {
+        const coordsElite = coordenadasSomatocarta(elite)
         distanciasElite = { sad: distanciaSAD(somatotipo, elite), euclidiana: distanciaEuclidiana(coords, coordsElite) }
       }
     }
@@ -394,16 +409,15 @@ export default function CalculadoraSomatotipo() {
     }
 
     if (sexoValido && mostrarMedia) {
-      const muestraPos = muestraCadetePorPosicion[posicion] ?? muestraCadeteTotal
       const somatotipoMedia: Somatotipo = {
-        endomorfia: muestraPos.endomorfia.media,
-        mesomorfia: muestraPos.mesomorfia.media,
-        ectomorfia: muestraPos.ectomorfia.media,
+        endomorfia: muestraCadeteTotal.endomorfia.media,
+        mesomorfia: muestraCadeteTotal.mesomorfia.media,
+        ectomorfia: muestraCadeteTotal.ectomorfia.media,
       }
       puntos.push({
         id: 'media',
         tipo: 'media',
-        label: `Media cadete — ${NOMBRES_POSICION[posicion]} (n=${muestraPos.n})`,
+        label: `Media de la muestra cadete total (n=${muestraCadeteTotal.n})`,
         somatotipo: somatotipoMedia,
         coords: coordenadasSomatocarta(somatotipoMedia),
       })
@@ -609,12 +623,13 @@ export default function CalculadoraSomatotipo() {
           </button>
           <label className="flex items-center gap-2 text-xs text-ink-700">
             <input type="checkbox" checked={mostrarMedia} onChange={(e) => setMostrarMedia(e.target.checked)} />
-            Mostrar también la media cadete del artículo en la somatocarta
+            Mostrar la media de la muestra cadete total en la somatocarta
           </label>
         </div>
         <p className="mt-2 text-[11px] text-ink-400">
           "Cargar datos de ejemplo" usa los valores medios reales de la posición Pívot (Tabla 1, Abella del Campo et al., 2016), no datos
-          inventados — útil para probar el modo completo sin medir a nadie.
+          inventados — útil para probar el modo completo sin medir a nadie. La somatocarta siempre muestra, como en la Figura 1 del
+          artículo, las 4 referencias de élite por posición (base, escolta, alero, pívot) junto con tu resultado.
         </p>
 
         <p className="mt-6 max-w-2xl text-xs leading-relaxed text-ink-400">
