@@ -148,6 +148,23 @@ const EJEMPLOS_POR_POSICION: Record<EjemploPosicion, Partial<FormState>> = {
   },
 }
 
+// Ejemplo ILUSTRATIVO (no es un jugador real ni un dato de ninguna fuente): solo
+// talla, peso, envergadura y edad, sin medidas ISAK, para mostrar cómo responde la
+// calculadora con un perfil claramente alejado de las 5 posiciones de baloncesto
+// (dispara el veredicto "considera explorar otro deporte"). A diferencia de los 4
+// ejemplos de arriba, estos números no están tomados de la Tabla 1 del artículo ni
+// de ninguna otra fuente citable — por eso se etiqueta aparte como hipotético y no
+// se completan las medidas ISAK (inventar pliegues/diámetros como si fueran de
+// alguien real sí violaría la regla de no inventar datos del proyecto).
+const EJEMPLO_FUERA_DE_RANGO: Partial<FormState> = {
+  edad: '17',
+  talla: '150',
+  peso: '42',
+  envergadura: '146',
+  posicion: 'base',
+  sexo: 'masculino',
+}
+
 // Rangos fisiológicos plausibles para la validación (§3). No son límites clínicos
 // estrictos, solo una red de seguridad contra errores de digitación.
 const RANGOS = {
@@ -263,8 +280,16 @@ export default function CalculadoraSomatotipo() {
   const campo = (k: keyof FormState) => (v: string) => setForm((f) => ({ ...f, [k]: v }))
 
   function cargarEjemplo(pos: EjemploPosicion) {
-    setForm((f) => ({ ...f, ...EJEMPLOS_POR_POSICION[pos] }))
+    setForm({ ...FORM_INICIAL, ...EJEMPLOS_POR_POSICION[pos] })
     setMostrarIsak(true)
+    setErrores([])
+    setAvisos([])
+    setResultado(null)
+  }
+
+  function cargarEjemploFueraDeRango() {
+    setForm({ ...FORM_INICIAL, ...EJEMPLO_FUERA_DE_RANGO })
+    setMostrarIsak(false)
     setErrores([])
     setAvisos([])
     setResultado(null)
@@ -696,6 +721,24 @@ export default function CalculadoraSomatotipo() {
             útil para probar el modo completo y comparar distintos perfiles sin medir a nadie. La somatocarta siempre muestra, como en la
             Figura 1 del artículo, las 4 referencias de élite por posición junto con tu resultado.
           </p>
+
+          <div className="mt-5 border-t border-dashed border-ink-900/10 pt-4">
+            <p className="text-xs uppercase tracking-wide text-ink-400">
+              Ejemplo ilustrativo: un perfil que no encaja con el baloncesto
+            </p>
+            <button
+              type="button"
+              onClick={cargarEjemploFueraDeRango}
+              className="mt-2 inline-flex items-center gap-2 border border-dashed border-ink-900/25 px-4 py-2 text-xs font-medium uppercase tracking-wide text-ink-700 transition-colors hover:border-accent-500 hover:text-accent-600"
+            >
+              Cargar ejemplo fuera de rango
+            </button>
+            <p className="mt-2 text-[11px] text-ink-400">
+              A diferencia de los 4 botones de arriba, este perfil (talla y envergadura muy por debajo de las 5 posiciones) es hipotético,
+              no proviene de la Tabla 1 ni de ninguna otra fuente — se usa solo talla, peso, envergadura y edad, sin inventar medidas ISAK
+              de pliegues o diámetros. Sirve para ver cómo luce el veredicto "considera explorar otro deporte".
+            </p>
+          </div>
         </div>
 
         <p className="mt-6 max-w-2xl text-xs leading-relaxed text-ink-400">
