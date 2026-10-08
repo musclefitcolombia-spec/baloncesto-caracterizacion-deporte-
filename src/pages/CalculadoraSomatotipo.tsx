@@ -203,7 +203,6 @@ interface Resultado {
   tallaAdulta: ReturnType<typeof estimarTallaAdulta> | null
   distanciasElite: { sad: number; euclidiana: number } | null
   puntosSomatocarta: PuntoSomatocarta[]
-  zonaIncertidumbre?: { centro: { x: number; y: number }; radioX: number; radioY: number }
 }
 
 function NumberField({
@@ -503,19 +502,6 @@ export default function CalculadoraSomatotipo() {
       })
     }
 
-    // Propagación aproximada (no estadísticamente estricta, solo orientativa) de la
-    // incertidumbre de ±1 DE de endomorfia y mesomorfia sobre las coordenadas X, Y.
-    // X = ecto − endo, con ecto exacta ⇒ la incertidumbre de X es la DE de endo.
-    // Y = 2·meso − (endo + ecto), con ecto exacta ⇒ se combinan las DE de meso (×2) y endo.
-    const zonaIncertidumbre =
-      modo === 'rapido'
-        ? {
-            centro: coords,
-            radioX: muestraCadeteTotal.endomorfia.de,
-            radioY: 2 * muestraCadeteTotal.mesomorfia.de + muestraCadeteTotal.endomorfia.de,
-          }
-        : undefined
-
     setResultado({
       modo,
       somatotipo,
@@ -535,7 +521,6 @@ export default function CalculadoraSomatotipo() {
       tallaAdulta,
       distanciasElite,
       puntosSomatocarta: puntos,
-      zonaIncertidumbre,
     })
   }
 
@@ -830,7 +815,7 @@ function ResultadoSomatotipo({ resultado: r, form }: { resultado: Resultado; for
       </div>
 
       <div className="border border-t-0 border-ink-900/10 bg-white/60 p-6 shadow-card sm:p-10 print:break-inside-avoid">
-        <Somatocarta puntos={r.puntosSomatocarta} zonaIncertidumbre={r.zonaIncertidumbre} distancias={r.distanciasElite} />
+        <Somatocarta puntos={r.puntosSomatocarta} distancias={r.distanciasElite} />
       </div>
 
       {!sexoValido && (

@@ -20,16 +20,8 @@ export interface PuntoSomatocarta {
   enfasis?: boolean
 }
 
-export interface ZonaIncertidumbre {
-  centro: CoordenadasSomatocarta
-  /** semieje X e Y de la elipse de incertidumbre, en unidades de somatotipo. */
-  radioX: number
-  radioY: number
-}
-
 interface SomatocartaProps {
   puntos: PuntoSomatocarta[]
-  zonaIncertidumbre?: ZonaIncertidumbre
   /** Si se da, dibuja una línea discontinua del punto "atleta" al punto "elite" con las distancias. */
   distancias?: { sad: number; euclidiana: number } | null
 }
@@ -165,7 +157,7 @@ function Marcador({ tipo, cx, cy, focused, opacity = 1 }: { tipo: TipoPunto; cx:
   }
 }
 
-export default function Somatocarta({ puntos, zonaIncertidumbre, distancias }: SomatocartaProps) {
+export default function Somatocarta({ puntos, distancias }: SomatocartaProps) {
   const svgRef = useRef<SVGSVGElement>(null)
   const [activo, setActivo] = useState<string | null>(null)
   const titleId = useId()
@@ -287,21 +279,6 @@ export default function Somatocarta({ puntos, zonaIncertidumbre, distancias }: S
             </text>
           ))}
 
-          {/* Zona de incertidumbre (modo rápido) */}
-          {zonaIncertidumbre && (
-            <ellipse
-              cx={sx(zonaIncertidumbre.centro.x)}
-              cy={sy(zonaIncertidumbre.centro.y)}
-              rx={zonaIncertidumbre.radioX * UNIT_X}
-              ry={zonaIncertidumbre.radioY * UNIT_Y}
-              fill="#E8720C"
-              fillOpacity={0.12}
-              stroke="#E8720C"
-              strokeOpacity={0.5}
-              strokeDasharray="4 3"
-            />
-          )}
-
           {/* Línea de distancia atleta -> élite */}
           {atleta && elite && distancias && (
             <>
@@ -383,12 +360,6 @@ export default function Somatocarta({ puntos, zonaIncertidumbre, distancias }: S
                 {ETIQUETA_TIPO[t]}
               </li>
             ),
-        )}
-        {zonaIncertidumbre && (
-          <li className="flex items-center gap-1.5">
-            <span className="h-3 w-5 border border-dashed border-accent-500 bg-accent-500/15" aria-hidden="true" />
-            Zona de incertidumbre (modo rápido)
-          </li>
         )}
       </ul>
 
