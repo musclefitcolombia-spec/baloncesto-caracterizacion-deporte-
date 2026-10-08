@@ -73,25 +73,79 @@ const FORM_INICIAL: FormState = {
   tallaPadre: '',
 }
 
-// Datos de ejemplo para probar la calculadora de un clic: los valores medios de la
-// posición Pívot, Tabla 1 del artículo base (Abella del Campo et al., 2016) —
-// edad, talla, peso, envergadura y las 8 medidas ISAK (pliegues, diámetros y
-// perímetros). Son datos reales y citados, no inventados para la demostración.
-const EJEMPLO_PIVOT: Partial<FormState> = {
-  edad: '15.40',
-  talla: '193.60',
-  peso: '85.36',
-  envergadura: '197.40',
-  posicion: 'pivot',
-  sexo: 'masculino',
-  triceps: '13.42',
-  subescapular: '10.60',
-  supraespinal: '10.66',
-  piernaMedial: '12.90',
-  humero: '7.26',
-  femur: '9.94',
-  perimetroBrazo: '31.46',
-  perimetroPierna: '39.14',
+// Datos de ejemplo para probar la calculadora de un clic, uno por cada posición con
+// datos propios en la Tabla 1 del artículo base (Abella del Campo et al., 2016): edad,
+// talla, peso, envergadura y las 8 medidas ISAK (pliegues, diámetros y perímetros) que
+// pide la calculadora. Son los valores medios reales de cada submuestra (columnas Base,
+// Escolta, Alero y Pívot de la Tabla 1), citados y verificados contra el PDF — no
+// inventados —, útiles para comparar varios perfiles distintos sin medir a nadie.
+type EjemploPosicion = Extract<PosicionId, 'base' | 'escolta' | 'alero' | 'pivot'>
+
+const EJEMPLOS_POR_POSICION: Record<EjemploPosicion, Partial<FormState>> = {
+  base: {
+    edad: '15.25',
+    talla: '173.65',
+    peso: '65.95',
+    envergadura: '180.95',
+    posicion: 'base',
+    sexo: 'masculino',
+    triceps: '9.33',
+    subescapular: '9.13',
+    supraespinal: '8.00',
+    piernaMedial: '8.63',
+    humero: '6.73',
+    femur: '9.65',
+    perimetroBrazo: '29.45',
+    perimetroPierna: '35.35',
+  },
+  escolta: {
+    edad: '15.50',
+    talla: '185.00',
+    peso: '76.05',
+    envergadura: '195.25',
+    posicion: 'escolta',
+    sexo: 'masculino',
+    triceps: '10.25',
+    subescapular: '9.25',
+    supraespinal: '6.50',
+    piernaMedial: '9.40',
+    humero: '6.95',
+    femur: '9.50',
+    perimetroBrazo: '30.05',
+    perimetroPierna: '36.80',
+  },
+  alero: {
+    edad: '15.33',
+    talla: '186.96',
+    peso: '73.83',
+    envergadura: '192.70',
+    posicion: 'alero',
+    sexo: 'masculino',
+    triceps: '9.92',
+    subescapular: '8.79',
+    supraespinal: '8.96',
+    piernaMedial: '10.01',
+    humero: '7.08',
+    femur: '9.73',
+    perimetroBrazo: '29.38',
+    perimetroPierna: '36.69',
+  },
+  pivot: {
+    edad: '15.40',
+    talla: '193.60',
+    peso: '85.36',
+    envergadura: '197.40',
+    posicion: 'pivot',
+    sexo: 'masculino',
+    triceps: '13.42',
+    subescapular: '10.60',
+    supraespinal: '10.66',
+    piernaMedial: '12.90',
+    humero: '7.26',
+    femur: '9.94',
+    perimetroBrazo: '31.46',
+    perimetroPierna: '39.14',
+  },
 }
 
 // Rangos fisiológicos plausibles para la validación (§3). No son límites clínicos
@@ -208,11 +262,12 @@ export default function CalculadoraSomatotipo() {
 
   const campo = (k: keyof FormState) => (v: string) => setForm((f) => ({ ...f, [k]: v }))
 
-  function cargarEjemplo() {
-    setForm((f) => ({ ...f, ...EJEMPLO_PIVOT }))
+  function cargarEjemplo(pos: EjemploPosicion) {
+    setForm((f) => ({ ...f, ...EJEMPLOS_POR_POSICION[pos] }))
     setMostrarIsak(true)
     setErrores([])
     setAvisos([])
+    setResultado(null)
   }
 
   function validar(): { ok: boolean; errores: string[]; avisos: string[] } {
@@ -614,23 +669,34 @@ export default function CalculadoraSomatotipo() {
           >
             Calcular
           </button>
-          <button
-            type="button"
-            onClick={cargarEjemplo}
-            className="inline-flex items-center gap-2 border border-ink-900/15 px-5 py-3 text-xs font-medium uppercase tracking-wide text-ink-700 transition-colors hover:border-accent-500 hover:text-accent-600"
-          >
-            Cargar datos de ejemplo (Pívot)
-          </button>
           <label className="flex items-center gap-2 text-xs text-ink-700">
             <input type="checkbox" checked={mostrarMedia} onChange={(e) => setMostrarMedia(e.target.checked)} />
             Mostrar la media de la muestra cadete total en la somatocarta
           </label>
         </div>
-        <p className="mt-2 text-[11px] text-ink-400">
-          "Cargar datos de ejemplo" usa los valores medios reales de la posición Pívot (Tabla 1, Abella del Campo et al., 2016), no datos
-          inventados — útil para probar el modo completo sin medir a nadie. La somatocarta siempre muestra, como en la Figura 1 del
-          artículo, las 4 referencias de élite por posición (base, escolta, alero, pívot) junto con tu resultado.
-        </p>
+
+        <div className="mt-5 border-t border-ink-900/10 pt-5">
+          <p className="text-xs uppercase tracking-wide text-ink-400">
+            Cargar datos de ejemplo (uno por posición, para comparar varios perfiles)
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {(Object.keys(EJEMPLOS_POR_POSICION) as EjemploPosicion[]).map((pos) => (
+              <button
+                key={pos}
+                type="button"
+                onClick={() => cargarEjemplo(pos)}
+                className="inline-flex items-center gap-2 border border-ink-900/15 px-4 py-2 text-xs font-medium uppercase tracking-wide text-ink-700 transition-colors hover:border-accent-500 hover:text-accent-600"
+              >
+                {NOMBRES_POSICION[pos]}
+              </button>
+            ))}
+          </div>
+          <p className="mt-2 text-[11px] text-ink-400">
+            Cada botón carga los valores medios reales de esa posición (Tabla 1, Abella del Campo et al., 2016) — no datos inventados —,
+            útil para probar el modo completo y comparar distintos perfiles sin medir a nadie. La somatocarta siempre muestra, como en la
+            Figura 1 del artículo, las 4 referencias de élite por posición junto con tu resultado.
+          </p>
+        </div>
 
         <p className="mt-6 max-w-2xl text-xs leading-relaxed text-ink-400">
           Privacidad: todo el cálculo ocurre en tu navegador. No enviamos, registramos ni guardamos los datos que ingreses aquí — ni
@@ -764,6 +830,22 @@ function ResultadoSomatotipo({ resultado: r, form }: { resultado: Resultado; for
       {sexoValido && r.aspectos.length > 0 && (
         <div className="border border-t-0 border-ink-900/10 bg-white/60 p-6 shadow-card sm:p-10 print:break-inside-avoid">
           <h3 className="font-display text-lg uppercase tracking-tight text-ink-950">Recomendaciones</h3>
+
+          <div
+            className={`mt-4 border-l-[3px] p-4 ${
+              r.otroDeporte.aplica ? 'border-l-red-600 bg-red-50' : 'border-l-emerald-600 bg-emerald-50'
+            }`}
+          >
+            <p className="text-xs uppercase tracking-wide text-ink-500">Veredicto orientativo</p>
+            <p className={`mt-1 font-display text-xl uppercase tracking-tight ${r.otroDeporte.aplica ? 'text-red-800' : 'text-emerald-800'}`}>
+              {r.otroDeporte.aplica ? 'Considera explorar otro deporte' : 'El baloncesto funciona para tu perfil'}
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-ink-600">
+              {r.otroDeporte.aplica
+                ? 'Tu perfil antropométrico se aleja de forma notable de las 5 posiciones de baloncesto (ver detalle abajo).'
+                : `Tu perfil antropométrico es compatible con alguna posición del baloncesto (la más cercana: ${NOMBRES_POSICION[r.ranking.ranking[0].posicionId]}). No es una garantía de rendimiento: la técnica, la táctica y la experiencia pesan tanto o más que la morfología.`}
+            </p>
+          </div>
 
           <div className="mt-4">
             <p className="text-xs uppercase tracking-wide text-ink-400">Posición más afín</p>
