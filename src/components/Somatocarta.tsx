@@ -198,7 +198,11 @@ export default function Somatocarta({ puntos, zonaIncertidumbre, distancias }: S
       ctx.scale(scale, scale)
       ctx.fillStyle = '#FAF5EC'
       ctx.fillRect(0, 0, SVG_W, SVG_H)
-      ctx.drawImage(img, 0, 0)
+      // Tamaño destino explícito: el SVG serializado por separado (fuera del DOM
+      // y su contenedor) no resuelve su width="100%", así que el navegador le da
+      // un tamaño intrínseco distinto al real y drawImage(img, 0, 0) lo dibujaría
+      // sin escalar, recortando el gráfico (p. ej. el texto "Mesomorfia").
+      ctx.drawImage(img, 0, 0, SVG_W, SVG_H)
       URL.revokeObjectURL(url)
       canvas.toBlob((blob) => {
         if (!blob) return
@@ -218,8 +222,9 @@ export default function Somatocarta({ puntos, zonaIncertidumbre, distancias }: S
         <svg
           ref={svgRef}
           viewBox={`0 0 ${SVG_W} ${SVG_H}`}
-          width="100%"
-          style={{ maxWidth: SVG_W, minWidth: 320 }}
+          width={SVG_W}
+          height={SVG_H}
+          style={{ width: '100%', height: 'auto', maxWidth: SVG_W, minWidth: 320 }}
           role="img"
           aria-labelledby={`${titleId} ${descId}`}
           className="mx-auto"
