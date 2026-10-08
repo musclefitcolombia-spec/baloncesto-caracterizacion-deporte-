@@ -701,11 +701,6 @@ export default function CalculadoraSomatotipo() {
               </button>
             ))}
           </div>
-          <p className="mt-2 text-[11px] text-ink-400">
-            Cada botón carga los valores medios reales de esa posición (Tabla 1, Abella del Campo et al., 2016) — no datos inventados —,
-            útil para probar el modo completo y comparar distintos perfiles sin medir a nadie. La somatocarta siempre muestra, como en la
-            Figura 1 del artículo, las 4 referencias de élite por posición junto con tu resultado.
-          </p>
 
           <div className="mt-5 border-t border-dashed border-ink-900/10 pt-4">
             <p className="text-xs uppercase tracking-wide text-ink-400">
@@ -718,18 +713,8 @@ export default function CalculadoraSomatotipo() {
             >
               Cargar ejemplo fuera de rango
             </button>
-            <p className="mt-2 text-[11px] text-ink-400">
-              A diferencia de los 4 botones de arriba, este perfil (talla y envergadura muy por debajo de las 5 posiciones) es hipotético,
-              no proviene de la Tabla 1 ni de ninguna otra fuente — se usa solo talla, peso, envergadura y edad, sin inventar medidas ISAK
-              de pliegues o diámetros. Sirve para ver cómo luce el veredicto "considera explorar otro deporte".
-            </p>
           </div>
         </div>
-
-        <p className="mt-6 max-w-2xl text-xs leading-relaxed text-ink-400">
-          Privacidad: todo el cálculo ocurre en tu navegador. No enviamos, registramos ni guardamos los datos que ingreses aquí — ni
-          siquiera en este dispositivo (no se usa localStorage). Al salir de la página, los datos desaparecen.
-        </p>
       </section>
 
       {resultado && <ResultadoSomatotipo resultado={resultado} form={form} />}
@@ -891,12 +876,6 @@ function ResultadoSomatotipo({ resultado: r, form }: { resultado: Resultado; for
               ))}
             </ul>
           </div>
-
-          <p className="mt-5 max-w-2xl text-xs leading-relaxed text-ink-500">
-            Las proporciones de un adolescente cambian con el crecimiento; este resultado es una foto del momento, no un pronóstico.
-            Ninguna recomendación aquí implica selección ni descarte: son orientaciones generales, no sustituyen la valoración de un
-            entrenador, preparador físico o nutricionista.
-          </p>
 
           {r.tallaAdulta && (
             <div className="mt-5 border-l-[3px] border-l-accent-500 bg-accent-50/50 p-4">
