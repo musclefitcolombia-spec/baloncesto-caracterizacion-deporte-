@@ -17,5 +17,6 @@ export const navItems: NavItem[] = [
   { path: '/ventanas-entrenabilidad', label: 'Ventanas de entrenabilidad', shortLabel: 'Ventanas', number: '08' },
   { path: '/deteccion-talento', label: 'Detección de talento', shortLabel: 'Detección', number: '09' },
   { path: '/calculadora-somatotipo', label: 'Calculadora de somatotipo', shortLabel: 'Somatotipo', number: '10' },
-  { path: '/referencias', label: 'Referencias', shortLabel: 'Referencias', number: '11' },
+  { path: '/gold-standard', label: 'Gold standard', shortLabel: 'Gold standard', number: '11' },
+  { path: '/referencias', label: 'Referencias', shortLabel: 'Referencias', number: '12' },
 ]
