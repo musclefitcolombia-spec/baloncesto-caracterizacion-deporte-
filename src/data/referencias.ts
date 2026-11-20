@@ -1,4 +1,5 @@
 import { fuentesGS } from './goldStandard.data'
+import { referenciasPhantom } from './phantom-referencias'
 
 export interface Referencia {
   cita: string
@@ -253,4 +254,13 @@ function insertarOrdenadas(base: Referencia[], nuevas: Referencia[]): Referencia
   return out
 }
 
-export const referencias: Referencia[] = insertarOrdenadas(referenciasBase, referenciasGoldStandard)
+// Referencias de la Calculadora Z Phantom (misma regla: las incompletas llevan la marca de verificación).
+const referenciasZPhantom: Referencia[] = referenciasPhantom.map((r) => ({
+  cita: r.completa ? r.cita : `${r.cita} [referencia en verificación]`,
+  url: r.url,
+}))
+
+export const referencias: Referencia[] = insertarOrdenadas(
+  insertarOrdenadas(referenciasBase, referenciasGoldStandard),
+  referenciasZPhantom,
+)

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculadora Z Phantom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   CALCULADORA Z PHANTOM — estilos encapsulados bajo #zphantom
+   Para integrar: copiar <section id="zphantom">…</section>, este <style>
+   y el <script> final. Cambia los colores en las variables --zp-*.
+   ===================================================================== */
+#zphantom{
+  --zp-bg:#16181b; --zp-panel:#1f2226; --zp-panel-2:#262a2f; --zp-line:#33383e;
+  --zp-text:#e9eaec; --zp-muted:#a3a8ae; --zp-accent:#f26a1b; --zp-accent-2:#ff8a3d;
+  --zp-ok:#2c3036; --zp-mid:#3a3f2a; --zp-warn:#34472a; --zp-bad:#4b3329;
+  --zp-ok-t:#e9eaec; --zp-warn-t:#cfe8b5; --zp-bad-t:#ffc7b0; --zp-mid-t:#e6e3b0;
+  --zp-radius:12px;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color:var(--zp-text); background:var(--zp-bg);
+  padding:28px 16px; line-height:1.5;
+}
+#zphantom *{box-sizing:border-box}
+#zphantom .zp-wrap{max-width:1100px;margin:0 auto}
+#zphantom h2,#zphantom h3{font-family:Oswald,"Arial Narrow",sans-serif;font-weight:600;margin:0;letter-spacing:.2px}
+#zphantom h2{font-size:clamp(1.6rem,3vw,2.2rem)}
+#zphantom h3{font-size:1.15rem}
+#zphantom .zp-sub{color:var(--zp-muted);margin:6px 0 20px;max-width:720px}
+#zphantom .zp-formula{font-family:"JetBrains Mono",ui-monospace,monospace;background:#0f1113;border-radius:var(--zp-radius);
+  padding:18px;text-align:center;font-size:clamp(.95rem,2.2vw,1.25rem);margin-bottom:20px;overflow-x:auto;white-space:nowrap}
+#zphantom .zp-formula .o{color:var(--zp-accent)}
+#zphantom .zp-card{background:var(--zp-panel);border:1px solid var(--zp-line);border-radius:var(--zp-radius);padding:18px;margin-bottom:16px}
+#zphantom .zp-grid-top{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;align-items:end}
+#zphantom label{display:block;font-size:.85rem;color:var(--zp-muted);margin-bottom:4px}
+#zphantom input[type=number],#zphantom select,#zphantom input[type=text]{
+  width:100%;background:var(--zp-panel-2);color:var(--zp-text);border:1px solid var(--zp-line);
+  border-radius:8px;padding:9px 10px;font:inherit;font-size:.95rem}
+#zphantom input:focus,#zphantom select:focus{outline:2px solid var(--zp-accent);outline-offset:1px;border-color:transparent}
+#zphantom input.zp-flag{border-color:#c4542b;background:#2e211c}
+#zphantom .zp-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+#zphantom button{font:inherit;font-weight:600;font-size:.9rem;border-radius:8px;padding:9px 14px;cursor:pointer;border:1px solid var(--zp-line);
+  background:var(--zp-panel-2);color:var(--zp-text)}
+#zphantom button.zp-primary{background:var(--zp-accent);border-color:var(--zp-accent);color:#fff}
+#zphantom button:hover{filter:brightness(1.12)}
+#zphantom details{background:var(--zp-panel);border:1px solid var(--zp-line);border-radius:var(--zp-radius);margin-bottom:10px}
+#zphantom summary{cursor:pointer;padding:14px 18px;font-family:Oswald,sans-serif;font-size:1.05rem;display:flex;justify-content:space-between;gap:10px;list-style:none}
+#zphantom summary::-webkit-details-marker{display:none}
+#zphantom summary::after{content:"+";color:var(--zp-accent);font-size:1.3rem;line-height:1}
+#zphantom details[open] summary::after{content:"–"}
+#zphantom summary small{font-family:Inter,sans-serif;color:var(--zp-muted);font-size:.8rem;margin-left:auto;align-self:center}
+#zphantom .zp-fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;padding:0 18px 18px}
+#zphantom .zp-field .zp-unit{color:var(--zp-accent-2);font-weight:600}
+#zphantom .zp-field .zp-zmini{font-size:.78rem;color:var(--zp-muted);min-height:1.1em;margin-top:3px}
+#zphantom .zp-note{font-size:.85rem;color:var(--zp-muted)}
+#zphantom .zp-alert{border-left:4px solid var(--zp-accent);background:var(--zp-panel-2);padding:10px 14px;border-radius:8px;margin:8px 0;font-size:.9rem}
+#zphantom .zp-alert b{color:var(--zp-accent-2)}
+#zphantom .zp-legend{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
+#zphantom .zp-chip{padding:4px 10px;border-radius:999px;font-size:.8rem;font-weight:600}
+#zphantom .b-ok{background:var(--zp-ok);color:var(--zp-ok-t)}
+#zphantom .b-mid{background:var(--zp-mid);color:var(--zp-mid-t)}
+#zphantom .b-warn{background:var(--zp-warn);color:var(--zp-warn-t)}
+#zphantom .b-bad{background:var(--zp-bad);color:var(--zp-bad-t)}
+#zphantom .zp-table-wrap{overflow-x:auto}
+#zphantom table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:620px}
+#zphantom th,#zphantom td{padding:8px 10px;border-bottom:1px solid var(--zp-line);text-align:right}
+#zphantom th:first-child,#zphantom td:first-child{text-align:left}
+#zphantom th{color:var(--zp-muted);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.4px}
+#zphantom td.zp-z{font-family:"JetBrains Mono",monospace;font-weight:600}
+#zphantom tr.zp-grp td{background:var(--zp-panel-2);color:var(--zp-accent-2);font-family:Oswald,sans-serif;text-align:left;font-size:.95rem}
+#zphantom .zp-empty{color:var(--zp-muted);text-align:center;padding:24px}
+#zphantom svg text{font-family:Inter,sans-serif}
+#zphantom .zp-top{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+#zphantom .zp-sport{background:var(--zp-panel-2);border:1px solid var(--zp-line);border-radius:10px;padding:14px;position:relative}
+#zphantom .zp-sport.r1{border-color:var(--zp-accent)}
+#zphantom .zp-sport .rk{position:absolute;top:12px;right:12px;background:var(--zp-accent);color:#fff;border-radius:999px;width:28px;height:28px;
+  display:grid;place-items:center;font-family:Oswald,sans-serif;font-weight:700}
+#zphantom .zp-sport h4{font-family:Oswald,sans-serif;font-size:1.15rem;margin:0 36px 2px 0;font-weight:600}
+#zphantom .zp-sport .pct{font-family:"JetBrains Mono",monospace;font-size:1.6rem;color:var(--zp-accent-2);font-weight:600}
+#zphantom .zp-bar{height:6px;background:var(--zp-line);border-radius:3px;overflow:hidden;margin:4px 0 10px}
+#zphantom .zp-bar i{display:block;height:100%;background:var(--zp-accent)}
+#zphantom .zp-sport ul{margin:0;padding-left:18px;font-size:.85rem;color:var(--zp-muted)}
+#zphantom .zp-sport li{margin:2px 0}
+#zphantom .zp-sport li b{color:var(--zp-text)}
+#zphantom table.zp-matriz{min-width:860px;font-size:.82rem}
+#zphantom table.zp-matriz td,#zphantom table.zp-matriz th{text-align:center;padding:6px}
+#zphantom table.zp-matriz td:first-child,#zphantom table.zp-matriz th:first-child{text-align:left}
+#zphantom table.zp-matriz tr.zp-tu td{background:#0f1113;font-weight:600;color:var(--zp-accent-2)}
+#zphantom table.zp-matriz tr.zp-hi td:first-child{color:var(--zp-accent-2);font-weight:600}
+#zphantom table.zp-matriz td.zp-na{color:var(--zp-line)}
+#zphantom table.zp-matriz td.zp-cerca{background:rgba(120,170,90,.22)}
+#zphantom table.zp-matriz td.zp-lejos{background:rgba(224,100,58,.22)}
+@media (max-width:560px){#zphantom .zp-fields{grid-template-columns:1fr 1fr}#zphantom summary small{display:none}}
+@media print{
+  #zphantom{background:#fff;color:#000}
+  #zphantom .zp-btns,#zphantom details:not(.zp-print){display:none}
+  #zphantom .zp-card{border-color:#999;background:#fff}
+}
+</style>
+</head>
+<body style="margin:0;background:#16181b">
+
+<section id="zphantom" aria-labelledby="zp-title">
+  <div class="zp-wrap">
+    <h2 id="zp-title">Calculadora Z Phantom</h2>
+    <p class="zp-sub">Escala tus medidas a la talla del Phantom de Ross y Wilson (1974), 170,18 cm, y obtén tu puntaje Z de proporcionalidad para cada variable. Llena solo las medidas que tengas.</p>
+
+    <div class="zp-formula" aria-label="Fórmula del puntaje Z Phantom">
+      Z = (1 / <span class="o">s</span>) · [ v · (170,18 / h)<sup class="o">d</sup> − <span class="o">P</span> ]
+    </div>
+
+    <!-- Datos del evaluado -->
+    <div class="zp-card">
+      <h3>Datos del evaluado</h3>
+      <div class="zp-grid-top" style="margin-top:12px">
+        <div><label for="zp-nombre">Nombre (opcional)</label><input type="text" id="zp-nombre" placeholder="Ej.: Atleta 1"></div>
+        <div><label for="zp-sexo">Sexo</label>
+          <select id="zp-sexo"><option value="">Sin especificar</option><option value="M">Masculino</option><option value="F">Femenino</option></select></div>
+        <div><label for="zp-edad">Edad (años)</label><input type="number" id="zp-edad" min="5" max="100" step="1" placeholder="Ej.: 21"></div>
+        <div><label for="zp-talla">Talla <span style="color:var(--zp-accent-2);font-weight:600">(cm) *</span></label>
+          <input type="number" id="zp-talla" min="80" max="250" step="0.1" placeholder="Ej.: 175,0" required></div>
+      </div>
+      <div class="zp-btns">
+        <button type="button" class="zp-primary" id="zp-calc">Calcular</button>
+        <button type="button" id="zp-demo">Cargar ejemplo</button>
+        <button type="button" id="zp-csv">Descargar CSV</button>
+        <button type="button" id="zp-print">Imprimir / PDF</button>
+        <button type="button" id="zp-reset">Limpiar</button>
+      </div>
+      <div id="zp-msg" role="status" aria-live="polite"></div>
+    </div>
+
+    <!-- Grupos de variables (se generan con JS) -->
+    <div id="zp-groups"></div>
+
+    <!-- Resultados -->
+    <div class="zp-card">
+      <h3>Perfil de proporcionalidad</h3>
+      <div class="zp-legend" aria-hidden="true">
+        <span class="zp-chip b-ok">|Z| &lt; 1 · Proporción común</span>
+        <span class="zp-chip b-mid">1 ≤ |Z| &lt; 2 · Moderada</span>
+        <span class="zp-chip b-warn">2 ≤ |Z| &lt; 4 · Poco común</span>
+        <span class="zp-chip b-bad">|Z| ≥ 4 · Revisa la medida</span>
+      </div>
+      <p class="zp-note" style="margin:-4px 0 10px">Barras desde Z = 0: <span style="color:var(--zp-accent-2);font-weight:600">naranja</span> = mayor que el Phantom para tu talla · <span style="color:#7f9bb3;font-weight:600">gris azulado</span> = menor · <span style="color:#e0643a;font-weight:600">rojo</span> = |Z| ≥ 4, revisa la medida.</p>
+      <div id="zp-chart"></div>
+    </div>
+
+    <div class="zp-card">
+      <h3>Tabla de resultados</h3>
+      <div class="zp-table-wrap" style="margin-top:10px">
+        <table aria-describedby="zp-title">
+          <thead><tr><th>Variable</th><th>Medida (v)</th><th>Escalada</th><th>P</th><th>s</th><th>d</th><th>Z</th><th>Lectura</th></tr></thead>
+          <tbody id="zp-tbody"><tr><td colspan="8" class="zp-empty">Ingresa la talla y al menos una medida.</td></tr></tbody>
+        </table>
+      </div>
+      <p class="zp-note" style="margin-top:10px" id="zp-nota-tabla">La talla se reporta sin escalar: Z = (h − 170,18) / 6,29. Los perímetros corregidos se calculan solos: perímetro − π · (pliegue en mm / 10). El modelo Phantom es asexuado: es normal que los hombres salgan negativos en diámetro biiliocrestal y positivos en biacromial.</p>
+    </div>
+
+    <!-- Matriz de orientación deportiva -->
+    <div class="zp-card" id="zp-matriz-card">
+      <h3>Matriz de orientación deportiva</h3>
+      <p class="zp-note" style="margin:6px 0 12px">Tu perfil Z se resume en 8 índices y se compara con el perfil típico de 25 deportes. Entre más cerca estés del perfil de un deporte, mayor la compatibilidad. Es una <b>orientación</b> para explorar, no una selección: la técnica, la fisiología, la motivación y el entrenamiento pesan tanto o más que la forma del cuerpo.</p>
+      <div id="zp-top"></div>
+      <details class="zp-print" id="zp-matriz-det" style="margin-top:12px">
+        <summary>Ver la matriz completa (25 deportes)<small>valores Z objetivo por índice</small></summary>
+        <div class="zp-table-wrap" style="padding:0 18px 18px">
+          <table class="zp-matriz">
+            <thead id="zp-mhead"></thead>
+            <tbody id="zp-mbody"><tr><td colspan="10" class="zp-empty">Completa tus medidas para ver la matriz.</td></tr></tbody>
+          </table>
+          <p class="zp-note" style="margin-top:10px"><b>Índices:</b> Talla = Z de la talla sin escalar · Adiposidad = promedio Z de los pliegues · Muscularidad = promedio Z de perímetros corregidos (o de brazo flexionado, antebrazo, muslo y pierna si no hay pliegues) · Robustez ósea = promedio Z de diámetros de húmero, fémur, muñeca y tobillo · Peso = Z del peso proporcional · Envergadura = Z de envergadura / extremidad superior · Hombros = Z biacromial y transverso de tórax · Tronco = Z de talla sentado (positivo = tronco largo y piernas cortas). Celdas en gris: índice que no pudiste medir (no cuenta en el cálculo).</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<script>
+/* =====================================================================
+   CALCULADORA Z PHANTOM — lógica
+   Valores P y s: Ross y Wilson (1974); Ross y Marfell-Jones (1991);
+   tabla recopilada en Esparza (1993), Manual de Cineantropometría (GREC-FEMEDE).
+   Perímetros corregidos: Kerr (1988).
+   d = 1 longitudes, perímetros, diámetros y pliegues; d = 3 masas.
+   ===================================================================== */
+(function(){
+  "use strict";
+  const H_PH = 170.18, S_TALLA = 6.29;
+
+  // [clave, etiqueta, unidad, P, s, d]
+  const GRUPOS = [
+    {id:"basicas", titulo:"Básicas", nota:"kg / cm", vars:[
+      ["peso","Peso corporal","kg",64.58,8.60,3],
+      ["tallaSentado","Talla sentado","cm",89.92,4.50,1],
+      ["envergadura","Envergadura","cm",172.35,7.41,1]
+    ]},
+    {id:"pliegues", titulo:"Pliegues cutáneos", nota:"en milímetros (mm)", vars:[
+      ["plTriceps","Tríceps","mm",15.40,4.47,1],
+      ["plSubescapular","Subescapular","mm",17.20,5.07,1],
+      ["plBiceps","Bíceps","mm",8.00,2.00,1],
+      ["plPectoral","Pectoral","mm",11.80,3.27,1],
+      ["plCresta","Cresta ilíaca (supracrestal)","mm",22.40,6.80,1],
+      ["plSupraespinal","Supraespinal","mm",15.40,4.47,1],
+      ["plAbdominal","Abdominal","mm",25.40,7.78,1],
+      ["plMuslo","Muslo anterior","mm",27.00,8.33,1],
+      ["plPierna","Pierna medial","mm",16.00,4.67,1]
+    ]},
+    {id:"perimetros", titulo:"Perímetros", nota:"en centímetros (cm)", vars:[
+      ["peCabeza","Cabeza","cm",56.00,1.44,1],
+      ["peCuello","Cuello","cm",34.91,1.73,1],
+      ["peBrazoRel","Brazo relajado","cm",26.89,2.33,1],
+      ["peBrazoFlex","Brazo flexionado y contraído","cm",29.41,2.37,1],
+      ["peAntebrazo","Antebrazo","cm",25.13,1.41,1],
+      ["peMuneca","Muñeca","cm",16.35,0.72,1],
+      ["peTorax","Tórax (mesoesternal)","cm",87.86,5.18,1],
+      ["peCintura","Cintura (mínima)","cm",71.91,4.45,1],
+      ["peUmbilical","Abdominal (umbilical)","cm",79.06,6.95,1],
+      ["peCadera","Cadera (glúteo)","cm",94.67,5.58,1],
+      ["peMuslo","Muslo (1 cm bajo glúteo)","cm",55.82,4.23,1],
+      ["pePierna","Pierna (máxima)","cm",35.25,2.30,1],
+      ["peTobillo","Tobillo","cm",21.71,1.33,1]
+    ]},
+    {id:"diametros", titulo:"Diámetros óseos", nota:"en centímetros (cm)", vars:[
+      ["diBiacromial","Biacromial","cm",38.04,1.92,1],
+      ["diTransTorax","Transverso del tórax","cm",27.92,1.74,1],
+      ["diAPTorax","Anteroposterior del tórax","cm",17.50,1.38,1],
+      ["diBiiliocrestal","Biiliocrestal","cm",28.84,1.75,1],
+      ["diHumero","Biepicondilar del húmero","cm",6.48,0.35,1],
+      ["diBiestiloideo","Biestiloideo (muñeca)","cm",5.21,0.28,1],
+      ["diFemur","Bicondilar del fémur","cm",9.52,0.48,1],
+      ["diBimaleolar","Bimaleolar (tobillo)","cm",6.68,0.36,1],
+      ["diMano","Anchura de la mano","cm",8.28,0.50,1],
+      ["diPie","Anchura del pie","cm",10.34,0.65,1]
+    ]},
+    {id:"longitudes", titulo:"Alturas y longitudes", nota:"en centímetros (cm)", vars:[
+      ["alAcromial","Altura acromial","cm",139.37,5.45,1],
+      ["alRadial","Altura radial","cm",107.25,5.37,1],
+      ["alIleoespinal","Altura ileoespinal","cm",94.11,4.71,1],
+      ["alTrocanterea","Altura trocantérea","cm",86.40,4.32,1],
+      ["alTibial","Altura tibial","cm",44.82,2.56,1],
+      ["loExtSup","Long. extremidad superior","cm",75.95,3.64,1],
+      ["loBrazo","Long. brazo (acromial-radial)","cm",32.53,1.77,1],
+      ["loAntebrazo","Long. antebrazo (radial-estilión)","cm",24.57,1.37,1],
+      ["loMano","Long. mano","cm",18.85,0.85,1],
+      ["loMuslo","Long. muslo","cm",41.37,2.48,1],
+      ["loPierna","Long. pierna","cm",37.72,2.15,1],
+      ["loPie","Long. pie","cm",25.50,1.16,1]
+    ]},
+    {id:"masas", titulo:"Masas fraccionadas (opcional)", nota:"en kilogramos (kg) · d = 3", vars:[
+      ["maOsea","Masa ósea","kg",10.49,1.57,3],
+      ["maMuscular","Masa muscular","kg",25.55,2.99,3],
+      ["maResidual","Masa residual","kg",16.41,1.90,3],
+      ["maGrasa","Masa grasa","kg",12.13,3.25,3]
+    ]}
+  ];
+
+  // Perímetros corregidos (Kerr, 1988): [clave, etiqueta, perímetro, pliegue, P, s]
+  const CORREGIDOS = [
+    ["coBrazo","Brazo relajado corregido","peBrazoRel","plTriceps",22.05,1.91],
+    ["coTorax","Tórax corregido","peTorax","plSubescapular",82.46,4.86],
+    ["coMuslo","Muslo corregido","peMuslo","plMuslo",47.34,3.59],
+    ["coPierna","Pierna corregida","pePierna","plPierna",30.22,1.97]
+  ];
+
+  const EJEMPLO = {talla:175, peso:82, tallaSentado:91.5, envergadura:178,
+    plTriceps:9, plSubescapular:12, plBiceps:4, plCresta:14, plSupraespinal:8, plAbdominal:14, plMuslo:12, plPierna:6,
+    peBrazoRel:36, peBrazoFlex:39, peAntebrazo:30, peMuneca:17.5, peTorax:104, peCintura:84, peCadera:99, peMuslo:60, pePierna:38,
+    diBiacromial:42, diBiiliocrestal:28.5, diHumero:7.2, diBiestiloideo:5.8, diFemur:10.1};
+
+  const $ = id => document.getElementById(id);
+  const root = $("zphantom");
+  const ALL = [];
+  GRUPOS.forEach(g => g.vars.forEach(v => ALL.push({key:v[0],label:v[1],unit:v[2],P:v[3],s:v[4],d:v[5],grupo:g.titulo})));
+
+  const fmt = (n,dec=2) => Number.isFinite(n) ? n.toLocaleString("es-CO",{minimumFractionDigits:dec,maximumFractionDigits:dec}) : "—";
+  const num = el => { if(!el) return NaN; const t=String(el.value).replace(",",".").trim(); return t===""?NaN:parseFloat(t); };
+
+  function zPhantom(v,h,P,s,d){ return (v*Math.pow(H_PH/h,d)-P)/s; }
+  function banda(z){
+    const a=Math.abs(z);
+    if(a<1) return {cls:"b-ok",txt:"Proporción común"};
+    if(a<2) return {cls:"b-mid",txt:z>0?"Moderadamente alto":"Moderadamente bajo"};
+    if(a<4) return {cls:"b-warn",txt:z>0?"Poco común (alto)":"Poco común (bajo)"};
+    return {cls:"b-bad",txt:"Revisa la medida"};
+  }
+
+  // Construir formulario
+  const cont = $("zp-groups");
+  GRUPOS.forEach((g,i) => {
+    const det = document.createElement("details");
+    if(i<3) det.open = true;
+    det.innerHTML = `<summary>${g.titulo}<small>${g.nota}</small></summary><div class="zp-fields"></div>`;
+    const box = det.querySelector(".zp-fields");
+    g.vars.forEach(v => {
+      const f = document.createElement("div");
+      f.className = "zp-field";
+      f.innerHTML = `<label for="zp-${v[0]}">${v[1]} <span class="zp-unit">(${v[2]})</span></label>
+        <input type="number" id="zp-${v[0]}" data-key="${v[0]}" step="0.1" min="0" inputmode="decimal" placeholder="P = ${fmt(v[3])}">
+        <div class="zp-zmini" id="zp-z-${v[0]}"></div>`;
+      box.appendChild(f);
+    });
+    cont.appendChild(det);
+  });
+
+  // Sugerencia de error de unidades
+  function pistaUnidades(r,h){
+    const a = zPhantom(r.v/10,h,r.P,r.s,r.d), b = zPhantom(r.v*10,h,r.P,r.s,r.d);
+    if(Math.abs(a)<3) return `¿Quizá la anotaste en ${r.unit==="mm"?"décimas de mm":"mm"}? Dividida entre 10 daría Z = ${fmt(a)}.`;
+    if(Math.abs(b)<3) return `¿Quizá la anotaste en ${r.unit==="mm"?"cm":"metros/dm"}? Multiplicada por 10 daría Z = ${fmt(b)}.`;
+    if(r.d===3) return "Revisa que el peso se haya elevado al cubo (d = 3) y que esté en kg.";
+    return "Revisa el punto anatómico, la técnica y que el dato esté bien anotado.";
+  }
+
+  function calcular(){
+    const h = num($("zp-talla"));
+    const msg = $("zp-msg"); msg.innerHTML = "";
+    root.querySelectorAll("input.zp-flag").forEach(e=>e.classList.remove("zp-flag"));
+    root.querySelectorAll(".zp-zmini").forEach(e=>e.textContent="");
+    if(!Number.isFinite(h) || h<80 || h>250){
+      $("zp-tbody").innerHTML = `<tr><td colspan="8" class="zp-empty">Ingresa una talla válida en centímetros (entre 80 y 250).</td></tr>`;
+      $("zp-chart").innerHTML = "";
+      $("zp-top").innerHTML = ""; $("zp-mhead").innerHTML = "";
+      $("zp-mbody").innerHTML = `<tr><td colspan="10" class="zp-empty">Completa tus medidas para ver la matriz.</td></tr>`;
+      if(Number.isFinite(h)) msg.innerHTML = `<div class="zp-alert"><b>Talla fuera de rango.</b> ¿La escribiste en metros (ej. 1,75)? Debe ir en cm (175).</div>`;
+      $("zp-talla").classList.toggle("zp-flag", Number.isFinite(h));
+      return null;
+    }
+    const vals = {};
+    ALL.forEach(x => vals[x.key] = num($("zp-"+x.key)));
+    const filas = [];
+    filas.push({key:"talla",label:"Talla",unit:"cm",v:h,esc:h,P:H_PH,s:S_TALLA,d:"—",z:(h-H_PH)/S_TALLA,grupo:"Básicas"});
+    ALL.forEach(x => {
+      const v = vals[x.key];
+      if(!Number.isFinite(v) || v<=0) return;
+      const esc = v*Math.pow(H_PH/h,x.d);
+      filas.push(Object.assign({},x,{v,esc,z:(esc-x.P)/x.s}));
+    });
+    CORREGIDOS.forEach(c => {
+      const pe = vals[c[2]], pl = vals[c[3]];
+      if(Number.isFinite(pe) && Number.isFinite(pl) && pe>0 && pl>=0){
+        const v = pe - Math.PI*(pl/10), esc = v*(H_PH/h);
+        filas.push({key:c[0],label:c[1],unit:"cm",v,esc,P:c[4],s:c[5],d:1,z:(esc-c[4])/c[5],grupo:"Perímetros corregidos (Kerr, 1988)"});
+      }
+    });
+
+    const alertas = [];
+    filas.forEach(r => {
+      const mini = $("zp-z-"+r.key);
+      if(mini) mini.textContent = "Z = "+fmt(r.z);
+      if(Math.abs(r.z)>=4 && r.key!=="talla"){
+        const inp = $("zp-"+r.key); if(inp) inp.classList.add("zp-flag");
+        const fuerte = Math.abs(r.z)>=8 ? " Un Z tan extremo casi siempre es un error de medida, no un talento." : "";
+        alertas.push(`<div class="zp-alert"><b>${r.label}: Z = ${fmt(r.z)}.</b>${fuerte} ${pistaUnidades(r,h)}</div>`);
+      }
+    });
+    if(filas.length===1) alertas.push(`<div class="zp-alert">Agrega al menos una medida además de la talla para ver tu perfil.</div>`);
+    msg.innerHTML = alertas.join("");
+
+    pintarTabla(filas); pintarGrafico(filas); pintarMatriz(filas);
+    return {h,filas};
+  }
+
+  function pintarTabla(filas){
+    let html = "", g = "";
+    filas.forEach(r => {
+      if(r.grupo!==g){ g=r.grupo; html += `<tr class="zp-grp"><td colspan="8">${g}</td></tr>`; }
+      const b = banda(r.z);
+      html += `<tr><td>${r.label} <span class="zp-note">(${r.unit})</span></td><td>${fmt(r.v)}</td><td>${fmt(r.esc)}</td>
+        <td>${fmt(r.P)}</td><td>${fmt(r.s)}</td><td>${r.d}</td><td class="zp-z">${r.z>0?"+":""}${fmt(r.z)}</td>
+        <td><span class="zp-chip ${b.cls}">${b.txt}</span></td></tr>`;
+    });
+    $("zp-tbody").innerHTML = html;
+  }
+
+  function pintarGrafico(filas){
+    const datos = filas.filter(r=>r.key!=="talla" || filas.length>1);
+    if(datos.length<2){ $("zp-chart").innerHTML = `<p class="zp-empty">El perfil aparecerá cuando ingreses medidas.</p>`; return; }
+    const css = getComputedStyle(root), c = n => css.getPropertyValue(n).trim();
+    const LIM = 5, rowH = 24, padL = 190, padR = 56, top = 30, W = 760;
+    const H = top + datos.length*rowH + 30, plotW = W - padL - padR;
+    const X = z => padL + (Math.max(-LIM,Math.min(LIM,z))+LIM)/(2*LIM)*plotW;
+    let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Perfil de puntajes Z Phantom">`;
+    s += `<rect x="${X(-4)}" y="${top-6}" width="${X(4)-X(-4)}" height="${datos.length*rowH+6}" fill="${c("--zp-warn")}" opacity=".35"/>`;
+    s += `<rect x="${X(-2)}" y="${top-6}" width="${X(2)-X(-2)}" height="${datos.length*rowH+6}" fill="${c("--zp-mid")}" opacity=".45"/>`;
+    s += `<rect x="${X(-1)}" y="${top-6}" width="${X(1)-X(-1)}" height="${datos.length*rowH+6}" fill="${c("--zp-panel-2")}"/>`;
+    for(let z=-LIM; z<=LIM; z++){
+      s += `<line x1="${X(z)}" x2="${X(z)}" y1="${top-6}" y2="${top+datos.length*rowH}" stroke="${c("--zp-line")}" stroke-width="${z===0?2:1}"/>`;
+      s += `<text x="${X(z)}" y="${top-12}" fill="${c("--zp-muted")}" font-size="11" text-anchor="middle">${z>0?"+":""}${z}</text>`;
+    }
+    // Barras horizontales desde Z = 0: naranja si es mayor que el Phantom, gris azulado si es menor, rojo si |Z| ≥ 4
+    const x0 = X(0), barH = rowH*0.62;
+    datos.forEach((r,i) => {
+      const y = top + i*rowH + rowH/2, x = X(r.z);
+      s += `<text x="${padL-10}" y="${y+4}" fill="${c("--zp-text")}" font-size="12" text-anchor="end">${r.label.length>26?r.label.slice(0,25)+"…":r.label}</text>`;
+      const out = Math.abs(r.z)>LIM;
+      const color = Math.abs(r.z)>=4 ? "#e0643a" : (r.z>=0 ? c("--zp-accent") : "#7f9bb3");
+      const bx = Math.min(x,x0), bw = Math.max(2, Math.abs(x-x0));
+      s += `<rect x="${bx}" y="${y-barH/2}" width="${bw}" height="${barH}" rx="3" fill="${color}"><title>${r.label}: Z = ${fmt(r.z)}</title></rect>`;
+      s += `<text x="${W-padR+8}" y="${y+4}" fill="${c("--zp-muted")}" font-size="11" font-family="JetBrains Mono,monospace">${out?(r.z>0?"›":"‹"):""}${r.z>0?"+":""}${fmt(r.z,1)}</text>`;
+    });
+    s += `<line x1="${x0}" x2="${x0}" y1="${top-6}" y2="${top+datos.length*rowH}" stroke="${c("--zp-text")}" stroke-width="1.5" opacity=".7"/>`;
+    s += `<text x="${padL}" y="${H-8}" fill="${c("--zp-muted")}" font-size="11">← Menor que el Phantom</text>`;
+    s += `<text x="${W-padR}" y="${H-8}" fill="${c("--zp-muted")}" font-size="11" text-anchor="end">Mayor que el Phantom →</text>`;
+    $("zp-chart").innerHTML = s + `</svg>`;
+  }
+
+  function csv(){
+    const r = calcular(); if(!r) return;
+    const nombre = $("zp-nombre").value.trim() || "evaluado";
+    const lineas = [["Nombre",nombre],["Sexo",$("zp-sexo").value],["Edad",$("zp-edad").value],["Talla (cm)",r.h],[],
+      ["Grupo","Variable","Unidad","Medida","Escalada","P","s","d","Z","Lectura"]];
+    r.filas.forEach(f => lineas.push([f.grupo,f.label,f.unit,f.v.toFixed(2),f.esc.toFixed(2),f.P,f.s,f.d,f.z.toFixed(2),banda(f.z).txt]));
+    if(ultimoRanking.length){
+      lineas.push([],["Orientación deportiva","Compatibilidad (%)","Rasgo clave"]);
+      ultimoRanking.forEach((d,i)=>lineas.push([(i<3?"★ ":"")+d.nom,d.pct,d.rasgo]));
+    }
+    const txt = "\uFEFF" + lineas.map(l=>l.map(x=>`"${String(x??"").replace(/"/g,'""')}"`).join(";")).join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([txt],{type:"text/csv;charset=utf-8"}));
+    a.download = `phantom_${nombre.replace(/\s+/g,"_")}.csv`; a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  }
+
+  root.addEventListener("input", e => { if(e.target.matches("input[type=number]")) calcular(); });
+  $("zp-calc").addEventListener("click", calcular);
+  $("zp-csv").addEventListener("click", csv);
+  $("zp-print").addEventListener("click", ()=>{ calcular(); window.print(); });
+  $("zp-reset").addEventListener("click", ()=>{ root.querySelectorAll("input").forEach(i=>i.value=""); $("zp-sexo").value=""; calcular(); });
+  $("zp-demo").addEventListener("click", ()=>{
+    root.querySelectorAll("input[type=number]").forEach(i=>i.value="");
+    $("zp-talla").value = EJEMPLO.talla;
+    Object.entries(EJEMPLO).forEach(([k,v])=>{ const el=$("zp-"+k); if(el) el.value=v; });
+    $("zp-nombre").value = "Ejemplo"; $("zp-sexo").value = "M"; $("zp-edad").value = 21;
+    root.querySelectorAll("details").forEach(d=>d.open=true);
+    calcular();
+  });
+
+  /* ===================================================================
+     MATRIZ DE ORIENTACIÓN DEPORTIVA
+     Perfiles Z objetivo ORIENTATIVOS construidos a partir de tendencias
+     morfológicas descritas en la literatura (Carter y Heath, 1990;
+     Norton y Olds, 2000 y 2001; Ackland y cols., 2012; Ross y Ward, 1984).
+     Escala: Z Phantom (0 = Phantom). Orden de índices:
+     T talla, G adiposidad, M muscularidad, O robustez ósea,
+     P peso proporcional, E envergadura, H hombros, C tronco.
+     =================================================================== */
+  const INDICES = [
+    {k:"T",nom:"Talla",mod:false},
+    {k:"G",nom:"Adiposidad",mod:true},
+    {k:"M",nom:"Muscularidad",mod:true},
+    {k:"O",nom:"Robustez ósea",mod:false},
+    {k:"P",nom:"Peso",mod:true},
+    {k:"E",nom:"Envergadura",mod:false},
+    {k:"H",nom:"Hombros",mod:false},
+    {k:"C",nom:"Tronco",mod:false}
+  ];
+  //            deporte                      T     G     M     O     P     E     H     C    rasgo clave
+  const DEPORTES = [
+    ["Baloncesto",                         [ 2.5, -0.5,  0.0,  0.0,  0.0,  1.0,  0.5, -0.5],"Gran talla y brazos largos"],
+    ["Voleibol",                           [ 2.0, -0.7,  0.0,  0.0, -0.3,  1.0,  0.5, -0.5],"Talla alta, piernas largas, peso liviano"],
+    ["Balonmano",                          [ 1.5, -0.3,  1.0,  0.7,  1.0,  0.8,  1.0,  0.0],"Alto, robusto y de hombros anchos"],
+    ["Fútbol",                             [ 0.0, -1.0,  0.8,  0.3,  0.3,  0.0,  0.0,  0.0],"Perfil equilibrado, poca grasa, piernas fuertes"],
+    ["Rugby (delanteros)",                 [ 1.0,  0.5,  2.0,  1.5,  2.5,  0.3,  1.5,  0.5],"Mucha masa, hueso grueso y potencia"],
+    ["Tenis",                              [ 1.0, -0.8,  0.8,  0.3,  0.0,  0.5,  0.3,  0.0],"Alto, ágil y de brazos largos"],
+    ["Halterofilia",                       [-1.0,  0.0,  3.0,  1.5,  2.5, -0.3,  1.0,  1.0],"Muy musculoso, tronco largo, palancas cortas"],
+    ["Powerlifting",                       [-0.5,  0.5,  3.0,  1.5,  3.0,  0.0,  1.0,  0.8],"Máxima masa muscular y ósea"],
+    ["CrossFit / entrenamiento funcional", [-0.3, -0.8,  2.2,  0.8,  1.3,  0.0,  1.0,  0.3],"Musculoso y magro"],
+    ["Gimnasia artística",                 [-2.0, -1.5,  1.5,  0.5,  0.0,  0.0,  1.0,  0.3],"Baja talla, muy magro, gran fuerza relativa"],
+    ["Escalada deportiva",                 [-0.5, -1.5,  1.2,  0.0, -1.0,  1.0,  0.3,  0.0],"Liviano, magro y de brazos largos"],
+    ["Atletismo: velocidad (100-400 m)",   [ 0.5, -1.5,  1.5,  0.0,  0.3,  0.3,  0.5, -0.5],"Magro, musculoso y de piernas largas"],
+    ["Atletismo: fondo (5 km-maratón)",    [-0.3, -1.8, -0.5, -0.5, -1.5,  0.0, -0.5, -0.3],"Muy liviano y magro, hueso fino"],
+    ["Atletismo: saltos",                  [ 1.2, -1.5,  0.0, -0.3, -0.7,  0.5,  0.0, -1.0],"Alto, liviano y de piernas muy largas"],
+    ["Atletismo: lanzamientos",            [ 1.5,  0.5,  2.0,  1.5,  2.5,  1.0,  1.5,  0.0],"Grande, pesado y de brazos largos"],
+    ["Natación",                           [ 1.2, -0.5,  0.8,  0.0,  0.3,  1.5,  1.5,  0.5],"Brazos largos, hombros anchos, tronco largo"],
+    ["Remo",                               [ 1.5, -0.5,  1.0,  0.7,  1.0,  1.0,  0.8,  0.0],"Alto, pesado y de palancas largas"],
+    ["Ciclismo de ruta",                   [ 0.0, -1.5,  0.0, -0.3, -1.0,  0.0, -0.5, -0.3],"Liviano y magro, hombros estrechos"],
+    ["Triatlón",                           [ 0.3, -1.5,  0.3,  0.0, -0.7,  0.5,  0.3,  0.0],"Magro, liviano y versátil"],
+    ["Patinaje de velocidad",              [-0.3, -0.8,  1.5,  0.3,  0.3,  0.0,  0.0,  0.5],"Muslos muy desarrollados, centro de gravedad bajo"],
+    ["Lucha olímpica",                     [-0.5, -0.5,  2.5,  1.2,  1.5,  0.3,  1.2,  0.8],"Compacto, muy musculoso y robusto"],
+    ["Judo",                               [ 0.0, -0.3,  2.0,  1.0,  1.2,  0.3,  1.0,  0.5],"Robusto y musculoso"],
+    ["Boxeo",                              [ 0.0, -1.0,  1.5,  0.3,  0.3,  1.0,  0.8,  0.0],"Magro, musculoso y de brazos largos"],
+    ["Taekwondo",                          [ 0.5, -1.2,  0.5, -0.3, -0.8,  0.5,  0.0, -1.0],"Liviano y de piernas largas"],
+    ["Esgrima",                            [ 1.0, -0.8,  0.0,  0.0, -0.3,  1.0,  0.0, -0.3],"Alto y de gran alcance"]
+  ];
+
+  const prom = arr => { const a = arr.filter(Number.isFinite); return a.length ? a.reduce((x,y)=>x+y,0)/a.length : NaN; };
+
+  function indicesDe(filas){
+    const z = {}; filas.forEach(r => z[r.key] = r.z);
+    const corr = prom([z.coBrazo,z.coTorax,z.coMuslo,z.coPierna]);
+    return {
+      T: z.talla,
+      G: prom([z.plTriceps,z.plSubescapular,z.plBiceps,z.plPectoral,z.plCresta,z.plSupraespinal,z.plAbdominal,z.plMuslo,z.plPierna]),
+      M: Number.isFinite(corr) ? corr : prom([z.peBrazoFlex,z.peAntebrazo,z.peMuslo,z.pePierna]),
+      O: prom([z.diHumero,z.diFemur,z.diBiestiloideo,z.diBimaleolar]),
+      P: z.peso,
+      E: prom([z.envergadura,z.loExtSup]),
+      H: prom([z.diBiacromial,z.diTransTorax]),
+      C: z.tallaSentado
+    };
+  }
+
+  // Compatibilidad: distancia euclídea ponderada (los rasgos marcados del deporte pesan más)
+  function compatibilidad(ind, obj){
+    let num = 0, den = 0, usados = 0;
+    const det = [];
+    INDICES.forEach((I,i) => {
+      const v = ind[I.k]; if(!Number.isFinite(v)) return;
+      const t = obj[i], w = 1 + Math.abs(t)/2, dif = v - t;
+      num += w*dif*dif; den += w; usados++;
+      det.push({I, v, t, dif});
+    });
+    if(!usados) return {pct:0, det, usados};
+    const dist = Math.sqrt(num/den);
+    return {pct: Math.max(0, Math.round(100*Math.exp(-(dist*dist)/(2*1.5*1.5)))), dist, det, usados};
+  }
+
+  let ultimoRanking = [];
+
+  function pintarMatriz(filas){
+    const ind = indicesDe(filas);
+    const disponibles = INDICES.filter(I => Number.isFinite(ind[I.k]));
+    const faltan = INDICES.filter(I => !Number.isFinite(ind[I.k])).map(I=>I.nom);
+    const top = $("zp-top");
+    ultimoRanking = [];
+    if(disponibles.length < 4){
+      top.innerHTML = `<div class="zp-alert"><b>Faltan datos para orientar.</b> Necesitas al menos 4 de los 8 índices (tienes ${disponibles.length}). Te faltan: ${faltan.join(", ")}. Lo mínimo recomendado: talla, peso, pliegues (tríceps, subescapular, supraespinal, abdominal, muslo, pierna), perímetros de brazo flexionado y pierna, y diámetros de húmero y fémur.</div>`;
+      $("zp-mhead").innerHTML = "";
+      $("zp-mbody").innerHTML = `<tr><td colspan="10" class="zp-empty">Completa tus medidas para ver la matriz.</td></tr>`;
+      return;
+    }
+    const ranking = DEPORTES.map(([nom,obj,rasgo]) => Object.assign({nom,obj,rasgo}, compatibilidad(ind,obj)))
+                            .sort((a,b)=>b.pct-a.pct);
+    ultimoRanking = ranking;
+
+    // Tarjetas: mínimo 3 recomendaciones (+ empates con la 3.ª)
+    const corte = ranking[2].pct;
+    const recom = ranking.filter((r,i)=> i<3 || (r.pct===corte && i<5));
+    top.innerHTML = (faltan.length ? `<p class="zp-note">Calculado con ${disponibles.length} de 8 índices. Para afinar, agrega: ${faltan.join(", ")}.</p>` : "") +
+      `<div class="zp-top">` + recom.map((r,i) => {
+        const orden = [...r.det].sort((a,b)=>Math.abs(a.dif)-Math.abs(b.dif));
+        const fuertes = orden.slice(0,2).map(d=>`<li><b>${d.I.nom}</b> muy cercano al perfil (tú ${fmt(d.v,1)} · deporte ${fmt(d.t,1)})</li>`).join("");
+        const g = orden[orden.length-1];
+        const brecha = Math.abs(g.dif) < 0.75 ? `<li>Sin brechas importantes frente al perfil.</li>` :
+          `<li><b>${g.I.nom}</b> ${g.dif>0?"por encima":"por debajo"} del perfil (${fmt(g.dif,1)}): ${g.I.mod?"<b>entrenable</b> con el plan adecuado.":"rasgo estructural, poco modificable."}</li>`;
+        return `<div class="zp-sport ${i===0?"r1":""}"><span class="rk">${i+1}</span><h4>${r.nom}</h4>
+          <div class="zp-note">${r.rasgo}</div>
+          <div class="pct">${r.pct}%</div><div class="zp-bar"><i style="width:${r.pct}%"></i></div>
+          <ul>${fuertes}${brecha}</ul></div>`;
+      }).join("") + `</div>`;
+
+    // Matriz completa
+    $("zp-mhead").innerHTML = `<tr><th>Deporte</th>${INDICES.map(I=>`<th>${I.nom}</th>`).join("")}<th>Compat.</th></tr>`;
+    let body = `<tr class="zp-tu"><td>Tú</td>${INDICES.map(I=>`<td>${Number.isFinite(ind[I.k])?(ind[I.k]>0?"+":"")+fmt(ind[I.k],1):"—"}</td>`).join("")}<td>—</td></tr>`;
+    const nombresTop = new Set(recom.map(r=>r.nom));
+    ranking.forEach(r => {
+      body += `<tr class="${nombresTop.has(r.nom)?"zp-hi":""}"><td>${nombresTop.has(r.nom)?"★ ":""}${r.nom}</td>` +
+        INDICES.map((I,i) => {
+          const v = ind[I.k], t = r.obj[i];
+          if(!Number.isFinite(v)) return `<td class="zp-na">${t>0?"+":""}${fmt(t,1)}</td>`;
+          const d = Math.abs(v-t), cls = d<0.75 ? "zp-cerca" : d>2 ? "zp-lejos" : "";
+          return `<td class="${cls}">${t>0?"+":""}${fmt(t,1)}</td>`;
+        }).join("") + `<td><b>${r.pct}%</b></td></tr>`;
+    });
+    $("zp-mbody").innerHTML = body;
+  }
+
+  // Exponer para pruebas
+  window.ZPhantom = {zPhantom, banda, GRUPOS, CORREGIDOS, DEPORTES, indicesDe, compatibilidad};
+})();
+</script>
+</body>
+</html>

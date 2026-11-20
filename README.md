@@ -7,12 +7,12 @@ Autores: Samuel López Cruz · Juan José Guarín — 2026.
 
 ## Contenido
 
-El sitio cubre 12 secciones navegables: Inicio, Historia (mundial y Colombia), Clasificación y
+El sitio cubre 13 secciones navegables: Inicio, Historia (mundial y Colombia), Clasificación y
 categorías, Reglamento y material, Demandas físicas y fisiológicas, Perfil por posición, Desarrollo
 juvenil y lesiones, Atletas referentes, Ventanas de entrenabilidad (fases sensibles), Detección de
-talento, una Calculadora de clasificación morfológica (somatotipo) y el apartado Gold standard
-(criterios de referencia de medición en jugadores U14), más la sección de Referencias con la
-bibliografía completa en formato APA 7.
+talento, una Calculadora de clasificación morfológica (somatotipo), el apartado Gold standard
+(criterios de referencia de medición en jugadores U14) y la Calculadora Z Phantom (proporcionalidad
+de Ross y Wilson, 1974), más la sección de Referencias con la bibliografía completa en formato APA 7.
 
 ### Apartado Gold standard
 
@@ -174,3 +174,12 @@ documento / en el mensaje de entrega del proyecto.
 
 Proyecto educativo sin fines comerciales, elaborado con fines de evaluación académica. El contenido
 está respaldado por las fuentes citadas en la sección de Referencias del sitio.
+
+### Calculadora Z Phantom
+
+Los datos (valores P, s y d, perímetros corregidos, índices y 25 perfiles deportivos) viven en
+`src/data/phantom.ts` y la lógica en `src/lib/phantom.ts`. Se copiaron sin cambios del componente
+original (`docs/calculadora-phantom.html`); `src/lib/phantom.test.ts` los compara contra ese archivo y
+verifica los casos de referencia (Z de peso, húmero, tríceps y brazo corregido, y el top 3 del ejemplo).
+Los perfiles de la matriz deportiva son estimaciones orientativas, no valores medidos. Todo se calcula en
+el navegador: no se guarda ni se envía ningún dato.

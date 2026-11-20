@@ -12,6 +12,7 @@ import Ventanas from './pages/Ventanas'
 import Deteccion from './pages/Deteccion'
 import CalculadoraSomatotipo from './pages/CalculadoraSomatotipo'
 import GoldStandard from './pages/GoldStandard'
+import CalculadoraPhantom from './pages/CalculadoraPhantom'
 import Referencias from './pages/Referencias'
 import NotFound from './pages/NotFound'
 
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="deteccion-talento" element={<Deteccion />} />
         <Route path="calculadora-somatotipo" element={<CalculadoraSomatotipo />} />
         <Route path="gold-standard" element={<GoldStandard />} />
+        <Route path="calculadora-phantom" element={<CalculadoraPhantom />} />
         <Route path="referencias" element={<Referencias />} />
         <Route path="*" element={<NotFound />} />
       </Route>

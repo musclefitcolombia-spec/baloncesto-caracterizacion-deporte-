@@ -18,5 +18,6 @@ export const navItems: NavItem[] = [
   { path: '/deteccion-talento', label: 'Detección de talento', shortLabel: 'Detección', number: '09' },
   { path: '/calculadora-somatotipo', label: 'Calculadora de somatotipo', shortLabel: 'Somatotipo', number: '10' },
   { path: '/gold-standard', label: 'Gold standard', shortLabel: 'Gold standard', number: '11' },
-  { path: '/referencias', label: 'Referencias', shortLabel: 'Referencias', number: '12' },
+  { path: '/calculadora-phantom', label: 'Calculadora Z Phantom', shortLabel: 'Phantom', number: '12' },
+  { path: '/referencias', label: 'Referencias', shortLabel: 'Referencias', number: '13' },
 ]

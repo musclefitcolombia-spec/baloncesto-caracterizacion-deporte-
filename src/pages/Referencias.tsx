@@ -20,8 +20,8 @@ export default function Referencias() {
   return (
     <div>
       <PageHeader
-        number="12"
-        kicker="Sección 12 · Referencias"
+        number="13"
+        kicker="Sección 13 · Referencias"
         title="Referencias"
         lead={`Listado completo, en formato APA 7 y orden alfabético, de las ${referencias.length} fuentes citadas a lo largo de este sitio.`}
       />
