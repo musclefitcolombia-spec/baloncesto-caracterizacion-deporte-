@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import SectionHeader from '../components/SectionHeader'
 import ResponsiveTable from '../components/ResponsiveTable'
@@ -42,6 +43,13 @@ export default function Deteccion() {
             </tr>
           ))}
         </ResponsiveTable>
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ink-700">
+          ¿Qué tan precisa es cada una de estas pruebas? En{' '}
+          <Link to="/gold-standard#gs-5" className="text-accent-600 underline underline-offset-2">
+            Gold standard
+          </Link>{' '}
+          se revisa el criterio de referencia del salto, la composición corporal y la capacidad aeróbica.
+        </p>
       </section>
 
       <CourtDivider />

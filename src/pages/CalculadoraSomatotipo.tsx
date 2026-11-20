@@ -1,4 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import SectionHeader from '../components/SectionHeader'
 import ResponsiveTable from '../components/ResponsiveTable'
@@ -544,6 +545,17 @@ export default function CalculadoraSomatotipo() {
           title="Datos del jugador"
           lead="Los cinco campos obligatorios permiten un modo rápido (ectomorfia exacta + estimación). Para el somatotipo completo, agrega las medidas ISAK."
         />
+
+        <p className="mb-5 max-w-3xl border-l-[3px] border-accent-500 bg-white/60 p-4 text-sm leading-relaxed text-ink-700 print:hidden">
+          <b>Limitación de las medidas con pliegues.</b> Los pliegues cutáneos son una estimación indirecta: en
+          jugadores universitarios de baloncesto, frente al DXA, subestimaron el porcentaje de grasa en unos 3 puntos
+          (muestra de 24 deportistas). No se extrapola a jugadores U14, pero conviene leer el resultado como una
+          aproximación. Más detalle en{' '}
+          <Link to="/gold-standard#gs-8" className="text-accent-600 underline underline-offset-2">
+            Gold standard
+          </Link>
+          .
+        </p>
 
         <div className="grid gap-5 border border-ink-900/10 bg-white/60 p-6 shadow-card sm:grid-cols-2 lg:grid-cols-3">
           <NumberField label="Edad" unidad="años" value={form.edad} onChange={campo('edad')} min={10} max={40} required />

@@ -7,11 +7,20 @@ Autores: Samuel López Cruz · Juan José Guarín — 2026.
 
 ## Contenido
 
-El sitio cubre 11 secciones navegables: Inicio, Historia (mundial y Colombia), Clasificación y
+El sitio cubre 12 secciones navegables: Inicio, Historia (mundial y Colombia), Clasificación y
 categorías, Reglamento y material, Demandas físicas y fisiológicas, Perfil por posición, Desarrollo
 juvenil y lesiones, Atletas referentes, Ventanas de entrenabilidad (fases sensibles), Detección de
-talento y una Calculadora de clasificación morfológica (somatotipo), más la sección de Referencias
-con la bibliografía completa en formato APA 7.
+talento, una Calculadora de clasificación morfológica (somatotipo) y el apartado Gold standard
+(criterios de referencia de medición en jugadores U14), más la sección de Referencias con la
+bibliografía completa en formato APA 7.
+
+### Apartado Gold standard
+
+Todo su contenido vive en `src/data/goldStandard.data.ts` (21 fuentes con población, n, criterio de
+referencia, nivel de evidencia y estado de verificación). Reglas: ningún dato se completa de memoria;
+lo que no se pudo confirmar queda como `null` o en la lista `pendiente` de cada fuente, y la referencia
+se muestra con la marca «referencia en verificación». Las referencias del apartado se agregan solas al
+listado general de `src/data/referencias.ts`.
 
 ## Stack técnico
 

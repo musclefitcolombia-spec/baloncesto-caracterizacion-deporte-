@@ -1,3 +1,5 @@
+import { fuentesGS } from './goldStandard.data'
+
 export interface Referencia {
   cita: string
   url?: string
@@ -7,7 +9,7 @@ export interface Referencia {
 // Juan Guarín, Samuel López); se sumaron referencias adicionales para los apartados de historia
 // de la NBA/EuroLeague y de referentes colombianos actuales por posición, agregados a pedido de
 // una revisión de compañero de equipo. Ninguna cifra se inventa: todo dato nuevo queda citado aquí.
-export const referencias: Referencia[] = [
+const referenciasBase: Referencia[] = [
   {
     cita: 'ACB.com. (2025). Braian Angola, jugador ACB.',
     url: 'https://acb.com/es/liga/jugadores/braian-angola-30003950',
@@ -234,3 +236,21 @@ export const referencias: Referencia[] = [
     url: 'https://sports.yahoo.com/article/where-watch-2025-wnba-star-105905863.html',
   },
 ]
+
+// Referencias del apartado "Gold standard": se derivan del archivo de datos para que ambos listados
+// no se desincronicen. Las incompletas llevan la marca "referencia en verificación".
+const referenciasGoldStandard: Referencia[] = fuentesGS.map((f) => ({
+  cita: f.referencia_completa ? f.fuente : `${f.fuente} [referencia en verificación]`,
+  url: f.url,
+}))
+
+function insertarOrdenadas(base: Referencia[], nuevas: Referencia[]): Referencia[] {
+  const out = [...base]
+  for (const r of nuevas) {
+    const i = out.findIndex((x) => x.cita.localeCompare(r.cita, 'es', { sensitivity: 'base' }) > 0)
+    out.splice(i === -1 ? out.length : i, 0, r)
+  }
+  return out
+}
+
+export const referencias: Referencia[] = insertarOrdenadas(referenciasBase, referenciasGoldStandard)

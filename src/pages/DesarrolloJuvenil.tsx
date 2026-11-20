@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import SectionHeader from '../components/SectionHeader'
 import Source from '../components/Source'
@@ -48,6 +49,13 @@ export default function DesarrolloJuvenil() {
         </div>
 
         <p className="mt-6 max-w-3xl text-sm leading-relaxed text-ink-700/80">{maduracionBiologica.conclusion}</p>
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ink-700">
+          Para ver cómo se mide la maduración y qué tan precisas son las pruebas que la acompañan, consulta{' '}
+          <Link to="/gold-standard#gs-2" className="text-accent-600 underline underline-offset-2">
+            Gold standard
+          </Link>
+          .
+        </p>
       </section>
 
       <CourtDivider />
