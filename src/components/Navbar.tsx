@@ -20,10 +20,10 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-ink-900/10 bg-ink-950/95 backdrop-blur print:hidden">
-      <div className="section-shell flex h-16 items-center justify-between">
+      <div className="section-shell flex h-16 items-center justify-between xl:max-w-[96rem]">
         <NavLink to="/" className="flex shrink-0 items-center gap-2 text-paper" aria-label="Ir a inicio">
           <IconBall className="h-6 w-6 text-accent-500" />
-          <span className="hidden font-display text-base uppercase leading-none tracking-wide sm:inline">
+          <span className="hidden font-display text-base uppercase leading-none tracking-wide sm:inline xl:hidden 2xl:inline">
             Baloncesto
           </span>
         </NavLink>

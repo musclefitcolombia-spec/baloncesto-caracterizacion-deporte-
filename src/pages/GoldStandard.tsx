@@ -106,7 +106,7 @@ export default function GoldStandard() {
           lead="Es el criterio de referencia contra el que se valida un método práctico: se mide a las mismas personas con ambos y se revisa cuánto se aleja el método simple del de referencia."
         />
         <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
-          <Card accent>
+          <Card accent className="min-w-0">
             <h3 className="font-display text-lg uppercase tracking-tight text-ink-950">No existe un único gold standard</h3>
             <p className="mt-3 text-sm leading-relaxed text-ink-700">
               El título de este apartado es una convención: aquí «gold standard» significa <b>el criterio de referencia
@@ -116,6 +116,7 @@ export default function GoldStandard() {
               2026).
             </p>
           </Card>
+          <div className="min-w-0">
           <ResponsiveTable headers={['Variable', 'Criterio usado en las fuentes', 'Dónde']} caption="Criterio de referencia usado para cada variable en las fuentes de este apartado">
             {criteriosPorVariable.map((c) => (
               <tr key={c.variable} className="border-t border-ink-900/10 align-top odd:bg-ink-950/[0.02]">
@@ -127,6 +128,7 @@ export default function GoldStandard() {
               </tr>
             ))}
           </ResponsiveTable>
+          </div>
         </div>
       </Bloque>
 
@@ -267,7 +269,7 @@ export default function GoldStandard() {
             </p>
           </Card>
           <Card>
-            <h3 className="font-display uppercase tracking-tight text-ink-950">Por qué el sprint y el T-test no cuentan menos</h3>
+            <h3 className="font-display uppercase tracking-tight text-ink-950">Sprint y agilidad: diferencias pequeñas</h3>
             <p className="mt-2 text-sm leading-relaxed text-ink-700">
               Las diferencias de 0,03 s en sprint y 0,02 s en agilidad son diminutas. Otros estudios con jugadores U14
               sí encontraron que la velocidad y la agilidad distinguían a los equipos mejor clasificados (Ramos et al.,
